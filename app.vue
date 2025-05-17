@@ -1,5 +1,8 @@
 <template>
-  <div class="text-3xl">
-    Hello world! 
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto w-full max-w-content">
+      hello
+      <NuxtPage />
+    </div>
   </div>
 </template>
