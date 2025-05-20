@@ -12,7 +12,10 @@ const config: Config = {
   theme: {
     extend: {
       maxWidth: {
-        content: '1024px'
+        content: '1280px'
+      },
+      fontFamily: {
+        sans: ['Helvetica', 'Arial', 'sans-serif']
       }
     }
   },
