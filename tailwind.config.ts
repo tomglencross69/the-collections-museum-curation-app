@@ -16,6 +16,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: ['Helvetica', 'Arial', 'sans-serif']
+      },
+      colors: {
+        'customYellow': '#FFF200'
       }
     }
   },
