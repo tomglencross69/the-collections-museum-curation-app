@@ -29,7 +29,6 @@ const searchText = ref("")
 const selectedTags = ref<string[]>([])
 
 const handleSearch = () => {
-
     const payload = {
         query: searchText.value,
         tags: selectedTags.value

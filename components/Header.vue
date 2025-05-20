@@ -15,7 +15,7 @@
     </div>
 
     <!-- Subheading below -->
-    <h2 class="subheader mt-2">
+    <h2 class="subheader mt-2 mr-20">
       Search over 10,000 ancient sites and 100,000 archaeological finds.
     </h2>
   </header>

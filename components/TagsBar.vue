@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-end gap-2 flex-wrap mt-4">
+    <div class="flex justify-end gap-2 flex-wrap"> 
         <button
         v-for="tag in tags"
         :key="tag"
