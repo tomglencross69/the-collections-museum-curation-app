@@ -35,7 +35,7 @@
 }
 
 .header {
-font-size: clamp(3rem, 6vw, 5rem);
+font-size: clamp(2rem, 6vw, 5rem);
 line-height: 0.9;
 }
 
