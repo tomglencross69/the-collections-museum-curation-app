@@ -1,7 +1,6 @@
 <template>
     <div>
-<Header />
-
+<NavBar/>
 <CurrentlySearching
 :selected-search="selectedSearch"
 @update-selected-search="selectedSearch = $event"
@@ -68,8 +67,8 @@ const placeholderText = computed(() =>
 
 const availableTags = computed(() => {
   return selectedSearch.value === 'mp'
-    ? ['Stone circles', 'Burial chambers', 'Rock art']
-    : ['Blade', 'Tool', 'Flint', 'Neolithic', 'Coin']
+    ? ['All', 'Stone circles', 'Burial chambers', 'Rock art']
+    : ['All', 'Blade', 'Tool', 'Flint', 'Neolithic', 'Coin']
 })
 
 watch(selectedSearch, () => {
