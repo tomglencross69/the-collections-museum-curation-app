@@ -1,10 +1,10 @@
 <template>
-  <div class="border rounded-lg shadow-sm p-4 flex flex-col gap-2 bg-gray-100 min-h-[200px]">
-    <img :src="item.imgURL" class="w-full h-40 object-cover rounded" />
-    <div class="text-sm">
+  <div class="exhibit-wrapper flex flex-col gap-2 ">
+    <img :src="item.imgURL" class="exhibit-image w-full object-cover rounded px-2" />
+    <div class="exhibit-card-text p-1 text-sm sm:text-base bg-customYellow rounded-b-lg h-full">
       <h3 class="font-semibold">{{ item.siteName }} ({{ item.period }})</h3>
       <p class="text-gray-600 italic">{{ item.county }} – {{ item.siteType }}</p>
-      <p class="mt-1 text-xs text-gray-500">
+      <p class="mt-1 text-xs sm:text-sm text-gray-500">
         Condition: {{ item.condition }} | Ambience: {{ item.ambience }} | Access: {{ item.access }}
       </p>
     </div>
