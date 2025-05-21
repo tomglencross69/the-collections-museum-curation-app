@@ -8,7 +8,7 @@
       <button
       @click="setSearch('pas')" 
       :class="[
-        'px-2 py-1 my-1 border border-black text-left text-sm rounded min-w-[150px]whitespace-nowrap', 
+        'px-2 py-1 my-1 border border-black text-left text-sm rounded min-w-[50px] whitespace-nowrap', 
         selectedSearch === 'pas' ? 'bg-black text-white' : 'bg-white text-black'
         ]">
         The Portable Antiquities Scheme
@@ -16,7 +16,7 @@
       <button
       @click="setSearch('mp')" 
       :class="[
-        'px-2 py-1 my-1 border border-black text-left text-sm rounded whitespace-nowrap min-w-[150px]', 
+        'px-2 py-1 my-1 border border-black text-left text-sm rounded whitespace-nowrap min-w-[50px]', 
         selectedSearch === 'mp' ? 'bg-black text-white' : 'bg-white text-black'
         ]">
         The Megalithic Portal

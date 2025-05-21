@@ -18,15 +18,26 @@ v-model="searchText"
 :selected-tags="selectedTags"
 @update:selected-tags="selectedTags = $event"/>
 
+<SearchResultsList
+  :items="items"
+  :selected-search="selectedSearch"
+/>
+
     </div>
 </template>
 
 <script setup lang="ts">
 
 import {ref, computed, watch} from 'vue'
+import { testDataPAS, testDataMP } from '@/test-data/testData'
+
 const selectedSearch = ref('pas')
 const searchText = ref("")
 const selectedTags = ref<string[]>([])
+
+const items = computed(() =>
+  selectedSearch.value === 'pas' ? testDataPAS : testDataMP
+)
 
 const handleSearch = () => {
     const payload = {
@@ -58,7 +69,7 @@ const placeholderText = computed(() =>
 const availableTags = computed(() => {
   return selectedSearch.value === 'mp'
     ? ['Stone circles', 'Burial chambers', 'Rock art']
-    : ['Blade', 'Tool', 'Flint', 'Neolithic']
+    : ['Blade', 'Tool', 'Flint', 'Neolithic', 'Coin']
 })
 
 watch(selectedSearch, () => {
