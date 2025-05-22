@@ -27,6 +27,13 @@ v-model="searchText"
   :selected-search="selectedSearch"
 />
 
+<Pagination
+  v-if="totalPages > 1"
+  :current-page="currentPage"
+  :total-pages="totalPages"
+  @update:page="handlePageChange"
+/>
+
     </div>
 </template>
 
@@ -38,21 +45,23 @@ import { testDataPAS, testDataMP } from '@/test-data/testData'
 const selectedSearch = ref('pas')
 const searchText = ref("")
 const selectedTags = ref<string[]>([])
+const items = ref<any[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+const currentPage = ref(1)
+const totalPages = ref(1)
 
 // TEST DATA LOGIC
 // const items = computed(() =>
 //   selectedSearch.value === 'pas' ? testDataPAS : testDataMP
 // )
 
-const items = ref<any[]>([])
-
-const loading = ref(false)
-const error = ref<string | null>(null)
-
 const handleSearch = async () => {
+  currentPage.value = 1
     const payload = {
         query: searchText.value.trim(),
-        tags: selectedTags.value
+        tags: selectedTags.value,
+        page: currentPage.value
     }
 
     if (!payload.query) {
@@ -67,13 +76,14 @@ const handleSearch = async () => {
     }
 }
 
-async function fetchPAS(payload: {query: string; tags: string[]}) {
+async function fetchPAS(payload: {query: string; tags: string[]; page?: number}) {
   loading.value = true
   error.value = null
   items.value = []
 
   try {
-const url = `https://finds.org.uk/database/search/results/q/${encodeURIComponent(payload.query)}/format/json`
+const page = payload.page || 1
+const url = `https://finds.org.uk/database/search/results/q/${encodeURIComponent(payload.query)}/thumbnail/1/page/${page}/format/json`
 
 const res = await fetch(url)
 
@@ -82,6 +92,8 @@ if (!res.ok) throw new Error(`PAS API error: ${res.statusText}`)
 const data = await res.json()
 
 items.value = data.results || []
+currentPage.value = data.meta.currentPage || 1
+totalPages.value = Math.ceil(data.meta.totalResults / data.meta.resultsPerPage)
   } catch (e:any) {
     error.value = e.message || 'Unknown error'
   } finally {
@@ -101,6 +113,24 @@ function fetchMP(payload: {query: string; tags: string[]}) {
 // const fetchMP = (payload: {query: string, tags: string[]}) => {
 //     console.log('Calling Megalithic Portal API with:', payload)
 // }
+
+function handlePageChange(newPage: number) {
+  currentPage.value = newPage
+
+  if (selectedSearch.value === 'pas') {
+    fetchPAS({
+      query: searchText.value.trim(),
+      tags: selectedTags.value,
+      page: newPage
+    })
+  } else {
+    fetchMP({
+      query: searchText.value.trim(),
+      tags: selectedTags.value
+      // Add page handling if/when MP supports it
+    })
+  }
+}
 
 const placeholderText = computed(() =>
   selectedSearch.value === 'mp'

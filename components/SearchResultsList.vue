@@ -17,5 +17,5 @@ const props = defineProps<{
   items: any[]
   selectedSearch: 'pas' | 'mp'
 }>()
-console.log('items:', props.items)
+
 </script>
