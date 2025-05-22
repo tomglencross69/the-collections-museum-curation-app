@@ -3,7 +3,7 @@
     <button
       @click="changePage(currentPage - 1)"
       :disabled="currentPage <= 1"
-      class="px-3 py-1 border border-black rounded bg-white hover:bg-gray-100 transition disabled:opacity-50"
+      class="px-1  border border-black rounded bg-white hover:bg-gray-100 transition disabled:opacity-50"
     >
       Previous
     </button>
@@ -15,7 +15,7 @@
     <button
       @click="changePage(currentPage + 1)"
       :disabled="currentPage >= totalPages"
-      class="px-3 py-1 border border-black rounded bg-white hover:bg-gray-100 transition disabled:opacity-50"
+      class="px-1 border border-black rounded bg-white hover:bg-gray-100 transition disabled:opacity-50"
     >
       Next
     </button>

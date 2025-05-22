@@ -20,6 +20,9 @@ v-model="searchText"
 <!-- LOADING AND ERROR STATE -->
 <div v-if="loading" class="text-blue-600 font-semibold my-2">Loading results...</div>
 <div v-if="error" class="text-red-600 font-semibold my-2">{{ error }}</div>
+<div v-if="!loading && !error && items.length === 0" class="text-gray-600 my-2 mx-1">
+  No results found.
+</div>
 
 
 <SearchResultsList
@@ -81,13 +84,38 @@ async function fetchPAS(payload: {query: string; tags: string[]; page?: number})
   error.value = null
   items.value = []
 
+   const tagToFilter: Record<string, string> = {
+    All: '',
+    Coin: '/objectType/COIN',
+    Hoard: '/objectType/HOARD',
+    Vessel: '/objectType/VESSEL',
+    'Finger Ring': '/objectType/FINGER+RING',
+    Brooch: '/objectType/BROOCH',
+    Weight: '/objectType/WEIGHT',
+  }
+
   try {
 const page = payload.page || 1
-const url = `https://finds.org.uk/database/search/results/q/${encodeURIComponent(payload.query)}/thumbnail/1/page/${page}/format/json`
+
+const selectedTag = payload.tags.length ? payload.tags[0] : 'All'
+
+const tagValue = tagToFilter[selectedTag] || ''
+
+const queryPart = encodeURIComponent(payload.query)
+
+const tagFilter = tagValue ? `/sort/objectType${tagValue}` : ''
+
+const url = `https://finds.org.uk/database/search/results/q/${queryPart}${tagFilter}/thumbnail/1/page/${page}/format/json`
+
+console.log("fetching URL", url)
 
 const res = await fetch(url)
 
-if (!res.ok) throw new Error(`PAS API error: ${res.statusText}`)
+if (!res.ok) {
+  const text = await res.text()
+  console.log('error response text',text)
+throw new Error(`PAS API error: ${res.statusText}`)
+}
 
 const data = await res.json()
 
@@ -141,7 +169,7 @@ const placeholderText = computed(() =>
 const availableTags = computed(() => {
   return selectedSearch.value === 'mp'
     ? ['All', 'Stone circles', 'Burial chambers', 'Rock art']
-    : ['All', 'Blade', 'Tool', 'Flint', 'Neolithic', 'Coin']
+    : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
 })
 
 watch(selectedSearch, () => {
