@@ -127,41 +127,46 @@ totalPages.value = Math.ceil(data.meta.totalResults / data.meta.resultsPerPage)
 }
 
 //FETCHING FROM EUROPEANA
-async function fetchEUR(payload: { query: string; tags: string[] }) {
-  loading.value = true
-  error.value = null
-  items.value = []
+async function fetchEUR(payload: { query: string; tags: string[]; page?: number }) {
+  loading.value = true;
+  error.value = null;
+  items.value = [];
 
   try {
-    const url = new URL("https://api.europeana.eu/record/v2/search.json")
+    const page = payload.page || 1;
+    const rows = 12;
+    const start = (page - 1) * rows + 1;
+
+    const url = new URL("https://api.europeana.eu/record/v2/search.json");
     url.search = new URLSearchParams({
-      wskey: "nticulanth", // Replace with your actual key
+      wskey: "nticulanth", // Replace with your actual API key
       query: payload.query,
       thumbnail: "true",
-      rows: "12",
-      sort: "random",
-      profile: "standard",
-    }).toString()
+      rows: rows.toString(),
+      start: start.toString(),
+      profile: "standard"
+    }).toString();
 
-    const res = await fetch(url)
+    const res = await fetch(url);
 
     if (!res.ok) {
-      const text = await res.text()
-      console.log("Europeana API error:", text)
-      throw new Error(`Europeana API error: ${res.statusText}`)
+      const text = await res.text();
+      console.log("Europeana API error:", text);
+      throw new Error(`Europeana API error: ${res.statusText}`);
     }
 
-    const data = await res.json()
+    const data = await res.json();
 
-    items.value = data.items || []
-    totalPages.value = 1 
-    currentPage.value = 1
+    items.value = data.items || [];
+    currentPage.value = page;
+    totalPages.value = Math.ceil((data.totalResults || 0) / rows);
   } catch (e: any) {
-    error.value = e.message || "Unknown error"
+    error.value = e.message || "Unknown error";
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
+
 
 
 function handlePageChange(newPage: number) {
@@ -176,8 +181,8 @@ function handlePageChange(newPage: number) {
   } else {
     fetchEUR({
       query: searchText.value.trim(),
-      tags: selectedTags.value
-      // Add page handling if/when EUR supports it
+      tags: selectedTags.value,
+      page: newPage// Add page handling if/when EUR supports it
     })
   }
 }
