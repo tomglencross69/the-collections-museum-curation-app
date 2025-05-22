@@ -16,7 +16,7 @@
 
     <!-- Subheading below -->
     <h2 class="subheader mt-2 mr-20">
-      Search over 10,000 ancient sites and 100,000 archaeological finds.
+      Search over 60 million records and 100,000 archaeological finds.
     </h2>
   </header>
 </template>

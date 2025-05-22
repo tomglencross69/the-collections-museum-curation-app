@@ -102,7 +102,7 @@ export const testDataPAS = [
 ];
 
 
-export const testDataMP = [
+export const testDataEUR = [
     {
         recordID: 1,
         siteName: "Twelve Apostles",

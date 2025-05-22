@@ -43,7 +43,7 @@ v-model="searchText"
 <script setup lang="ts">
 
 import {ref, computed, watch} from 'vue'
-import { testDataPAS, testDataMP } from '@/test-data/testData'
+import { testDataPAS, testDataEUR } from '@/test-data/testData'
 
 const selectedSearch = ref('pas')
 const searchText = ref("")
@@ -54,10 +54,6 @@ const error = ref<string | null>(null)
 const currentPage = ref(1)
 const totalPages = ref(1)
 
-// TEST DATA LOGIC
-// const items = computed(() =>
-//   selectedSearch.value === 'pas' ? testDataPAS : testDataMP
-// )
 
 const handleSearch = async () => {
   currentPage.value = 1
@@ -75,10 +71,11 @@ const handleSearch = async () => {
     if (selectedSearch.value === 'pas') {
         fetchPAS(payload) 
     } else {
-        fetchMP(payload)
+        fetchEUR(payload)
     }
 }
 
+// FETCHING FROM PAS
 async function fetchPAS(payload: {query: string; tags: string[]; page?: number}) {
   loading.value = true
   error.value = null
@@ -129,22 +126,47 @@ totalPages.value = Math.ceil(data.meta.totalResults / data.meta.resultsPerPage)
   }
 }
 
-function fetchMP(payload: {query: string; tags: string[]}) {
-  items.value = testDataMP
-  console.log('MP fetch not implemented yet:', payload)
-}
-// TEST DATA LOGIC
-// const fetchPAS = (payload: {query: string, tags: string[]}) => {
-//     console.log('Calling Portable Antiquities Scheme API with:', payload)
-// }
+//FETCHING FROM EUROPEANA
+async function fetchEUR(payload: { query: string; tags: string[] }) {
+  loading.value = true
+  error.value = null
+  items.value = []
 
-// const fetchMP = (payload: {query: string, tags: string[]}) => {
-//     console.log('Calling Megalithic Portal API with:', payload)
-// }
+  try {
+    const url = new URL("https://api.europeana.eu/record/v2/search.json")
+    url.search = new URLSearchParams({
+      wskey: "nticulanth", // Replace with your actual key
+      query: payload.query,
+      thumbnail: "true",
+      rows: "12",
+      sort: "random",
+      profile: "standard",
+    }).toString()
+
+    const res = await fetch(url)
+
+    if (!res.ok) {
+      const text = await res.text()
+      console.log("Europeana API error:", text)
+      throw new Error(`Europeana API error: ${res.statusText}`)
+    }
+
+    const data = await res.json()
+
+    items.value = data.items || []
+    totalPages.value = 1 
+    currentPage.value = 1
+  } catch (e: any) {
+    error.value = e.message || "Unknown error"
+  } finally {
+    loading.value = false
+  }
+}
+
 
 function handlePageChange(newPage: number) {
   currentPage.value = newPage
-
+  
   if (selectedSearch.value === 'pas') {
     fetchPAS({
       query: searchText.value.trim(),
@@ -152,24 +174,24 @@ function handlePageChange(newPage: number) {
       page: newPage
     })
   } else {
-    fetchMP({
+    fetchEUR({
       query: searchText.value.trim(),
       tags: selectedTags.value
-      // Add page handling if/when MP supports it
+      // Add page handling if/when EUR supports it
     })
   }
 }
 
 const placeholderText = computed(() =>
-  selectedSearch.value === 'mp'
-    ? 'Search archaeological sites...'
-    : 'Search finds...'
+selectedSearch.value === 'eur'
+? 'Search archaeological sites...'
+: 'Search finds...'
 )
 
 const availableTags = computed(() => {
-  return selectedSearch.value === 'mp'
-    ? ['All', 'Stone circles', 'Burial chambers', 'Rock art']
-    : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
+  return selectedSearch.value === 'eur'
+  ? ['All', 'Stone circles', 'Burial chambers', 'Rock art']
+  : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
 })
 
 watch(selectedSearch, () => {
@@ -183,3 +205,19 @@ watchEffect(() => {
 <style lang="scss" scoped>
 
 </style>
+
+
+
+<!-- // TEST DATA LOGIC
+// const fetchPAS = (payload: {query: string, tags: string[]}) => {
+//     console.log('Calling Portable Antiquities Scheme API with:', payload)
+// }
+
+// const fetchEUR = (payload: {query: string, tags: string[]}) => {
+//     console.log('Calling Megalithic Portal API with:', payload)
+// } -->
+
+<!-- // TEST DATA LOGIC
+// const items = computed(() =>
+//   selectedSearch.value === 'pas' ? testDataPAS : testDataEUR
+// ) -->

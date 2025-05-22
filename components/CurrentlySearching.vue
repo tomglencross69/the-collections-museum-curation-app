@@ -14,12 +14,12 @@
         The Portable Antiquities Scheme
       </button>
       <button
-      @click="setSearch('mp')" 
+      @click="setSearch('eur')" 
       :class="[
         'px-2 py-1 my-1 border border-black text-left text-sm rounded whitespace-nowrap min-w-[50px]', 
-        selectedSearch === 'mp' ? 'bg-black text-white' : 'bg-white text-black'
+        selectedSearch === 'eur' ? 'bg-black text-white' : 'bg-white text-black'
         ]">
-        The Megalithic Portal
+        Europeana
       </button>
     </div>
   </div>

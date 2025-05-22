@@ -4,18 +4,18 @@
       <PASCard v-for="item in items" :key="item.recordID" :item="item" />
     </template>
     <template v-else>
-      <MPCard v-for="item in items" :key="item.recordID" :item="item" />
+      <EURCard v-for="item in items" :key="item.recordID" :item="item" />
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
 import PASCard from './PASCard.vue'
-import MPCard from './MPCard.vue'
+import EURCard from './EURCard.vue'
 
 const props = defineProps<{
   items: any[]
-  selectedSearch: 'pas' | 'mp'
+  selectedSearch: 'pas' | 'eur'
 }>()
 
 </script>
