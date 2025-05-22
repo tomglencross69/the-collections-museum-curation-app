@@ -137,15 +137,44 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
     const rows = 12;
     const start = (page - 1) * rows + 1;
 
-    const url = new URL("https://api.europeana.eu/record/v2/search.json");
-    url.search = new URLSearchParams({
-      wskey: "nticulanth", // Replace with your actual API key
-      query: payload.query,
-      thumbnail: "true",
+    const tagToCollection: Record<string, string> = {
+      Archaeology: 'archaeology',
+      Art: 'art',
+      'Industrial Heritage': 'industrial',
+      Manuscripts: 'manuscripts',
+      Migration: 'migration',
+      Photography: 'photography',
+    }
+
+    let qf = ''
+    const selectedTag = payload.tags.length ? payload.tags[0] : 'All'
+    if (selectedTag !== 'All' && tagToCollection[selectedTag]) {
+      qf = `collection:${tagToCollection[selectedTag]}`
+    }
+
+
+    // const url = new URL("https://api.europeana.eu/record/v2/search.json");
+    // url.search = new URLSearchParams({
+    //   wskey: "nticulanth", // Replace with your actual API key
+    //   query: payload.query,
+    //   thumbnail: "true",
+    //   rows: rows.toString(),
+    //   start: start.toString(),
+    //   profile: "standard"
+    // }).toString();
+
+      const url = new URL("https://api.europeana.eu/record/v2/search.json")
+    const params = {
+      wskey: "nticulanth",
+      query: payload.query || '*',
       rows: rows.toString(),
       start: start.toString(),
-      profile: "standard"
-    }).toString();
+      profile: "standard",
+    }
+    if (qf) {
+      params['qf'] = qf
+    }
+    url.search = new URLSearchParams(params).toString()
 
     const res = await fetch(url);
 
