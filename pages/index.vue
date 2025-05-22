@@ -20,7 +20,7 @@ v-model="searchText"
 <!-- LOADING AND ERROR STATE -->
 <div v-if="loading" class="text-blue-600 font-semibold my-2">Loading results...</div>
 <div v-if="error" class="text-red-600 font-semibold my-2">{{ error }}</div>
-<div v-if="!loading && !error && items.length === 0" class="text-gray-600 my-2 mx-1">
+<div v-if="hasSearched && !loading && !error && items.length === 0" class="text-gray-600 my-2 mx-1">
   No results found.
 </div>
 
@@ -53,9 +53,11 @@ const loading = ref(false)
 const error = ref<string | null>(null)
 const currentPage = ref(1)
 const totalPages = ref(1)
+const hasSearched = ref(false)
 
 
 const handleSearch = async () => {
+  hasSearched.value = true
   currentPage.value = 1
     const payload = {
         query: searchText.value.trim(),
@@ -141,7 +143,7 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
       Archaeology: 'archaeology',
       Art: 'art',
       'Industrial Heritage': 'industrial',
-      Manuscripts: 'manuscripts',
+      Manuscripts: 'manuscript',
       Migration: 'migration',
       Photography: 'photography',
     }
@@ -151,17 +153,6 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
     if (selectedTag !== 'All' && tagToCollection[selectedTag]) {
       qf = `collection:${tagToCollection[selectedTag]}`
     }
-
-
-    // const url = new URL("https://api.europeana.eu/record/v2/search.json");
-    // url.search = new URLSearchParams({
-    //   wskey: "nticulanth", // Replace with your actual API key
-    //   query: payload.query,
-    //   thumbnail: "true",
-    //   rows: rows.toString(),
-    //   start: start.toString(),
-    //   profile: "standard"
-    // }).toString();
 
       const url = new URL("https://api.europeana.eu/record/v2/search.json")
     const params = {
@@ -228,8 +219,19 @@ const availableTags = computed(() => {
   : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
 })
 
+function resetPage() {
+  searchText.value = "";
+  selectedTags.value = [availableTags.value[0]];
+  items.value = [];
+  error.value = null;
+  loading.value = false;
+  currentPage.value = 1;
+  totalPages.value = 1;
+  hasSearched.value = false;
+}
+
 watch(selectedSearch, () => {
-  selectedTags.value = [availableTags.value[0]]
+  resetPage()
 })
 watchEffect(() => {
   selectedTags.value = [availableTags.value[0]]

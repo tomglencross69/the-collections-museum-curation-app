@@ -1,6 +1,7 @@
 <template>
   <div class="w-full flex items-center my-2 border-2 border-black rounded-lg px-1 bg-white shadow-md">
     <input
+    id="search-bar"
       type="text"
       class="flex-grow px-1 py-2 text-lg focus:outline-none"
       :value="modelValue"
