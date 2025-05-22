@@ -3,5 +3,10 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-05-15',
   devtools: { enabled: false },
   css: ['~/assets/css/main.css'],
-  modules: ['@nuxtjs/tailwindcss']
+  modules: ['@nuxtjs/tailwindcss'],
+  runtimeConfig: {
+    public: {
+      europeanaApi: process.env.EUROPEANA_API || ''
+    }
+  }
 })

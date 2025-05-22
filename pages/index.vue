@@ -133,6 +133,8 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
   loading.value = true;
   error.value = null;
   items.value = [];
+  const config = useRuntimeConfig();
+const apiKey = config.public.europeanaApi;
 
   try {
     const page = payload.page || 1;
@@ -156,7 +158,7 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
 
       const url = new URL("https://api.europeana.eu/record/v2/search.json")
     const params = {
-      wskey: "nticulanth",
+      wskey: apiKey,
       query: payload.query || '*',
       rows: rows.toString(),
       start: start.toString(),
@@ -187,8 +189,6 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
   }
 }
 
-
-
 function handlePageChange(newPage: number) {
   currentPage.value = newPage
   
@@ -202,7 +202,7 @@ function handlePageChange(newPage: number) {
     fetchEUR({
       query: searchText.value.trim(),
       tags: selectedTags.value,
-      page: newPage// Add page handling if/when EUR supports it
+      page: newPage
     })
   }
 }
