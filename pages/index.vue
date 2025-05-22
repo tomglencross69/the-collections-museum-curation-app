@@ -195,7 +195,7 @@ selectedSearch.value === 'eur'
 
 const availableTags = computed(() => {
   return selectedSearch.value === 'eur'
-  ? ['All', 'Stone circles', 'Burial chambers', 'Rock art']
+  ? ['All', 'Archaeology', 'Art', 'Industrial Heritage', 'Manuscripts', 'Migration', 'Photography']
   : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
 })
 
