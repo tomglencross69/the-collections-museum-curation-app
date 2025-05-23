@@ -3,7 +3,7 @@
     <img
       v-if="item.edmPreview?.[0]"
       :src="item.edmPreview[0]"
-      class="exhibit-image w-full object-cover rounded px-2"
+      class="exhibit-image w-full min-h-[200px] object-cover rounded px-2"
       :alt="item.title?.[0] || 'Europeana item'"
     />
     <div class="exhibit-card-text p-1 text-sm sm:text-base bg-customYellow rounded-b-lg h-full">
