@@ -8,6 +8,12 @@ export const useItemsStore = defineStore('items', {
     currentPage: 1,
     totalPages: 1,
     selectedItem: null as any | null,
+    searchContext: {
+      query: '',
+      tags: [] as string[],
+      page: 1,
+      source: 'pas' as 'pas' | 'eur',
+    }
   }),
   actions: {
     setItems(items: any[]) {
@@ -28,6 +34,9 @@ export const useItemsStore = defineStore('items', {
     setSelectedItem(item: any) {
       this.selectedItem = item
     },
+    setSearchContext(ctx: { query: string; tags: string[]; page: number; source: 'pas' | 'eur' }) {
+      this.searchContext = ctx
+    },
     reset() {
       this.items = []
       this.loading = false
@@ -35,6 +44,7 @@ export const useItemsStore = defineStore('items', {
       this.currentPage = 1
       this.totalPages = 1
       this.selectedItem = null  
+      this.searchContext = { query: '', tags: [], page: 1, source: 'pas' }
     },
   },
 })

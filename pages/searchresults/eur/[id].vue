@@ -1,4 +1,5 @@
 <template>
+    <button @click="$router.back()">Back</button>
   <div class="max-w-3xl mx-auto p-4">
     <div v-if="item">
       <h1 class="text-2xl font-bold mb-4">{{ item.title || item.name }}</h1>

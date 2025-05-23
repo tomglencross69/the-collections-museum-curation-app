@@ -51,6 +51,7 @@
 <script setup lang="ts">
 import { ref, computed, watch, watchEffect } from 'vue'
 import { useItemsStore } from '@/stores/items'
+import {onMounted} from 'vue'
 
 const itemsStore = useItemsStore()
 
@@ -108,6 +109,13 @@ async function handleSearch() {
   } else {
     await fetchEUR(payload)
   }
+
+    itemsStore.setSearchContext({
+    query: searchText.value.trim(),
+    tags: selectedTags.value,
+    page: itemsStore.currentPage,
+    source: selectedSearch.value,
+  })
 }
 
 async function fetchPAS(payload: { query: string; tags: string[]; page?: number }) {
@@ -208,6 +216,13 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
 
 function handlePageChange(newPage: number) {
   itemsStore.setCurrentPage(newPage)
+  
+  itemsStore.setSearchContext({
+    query: searchText.value.trim(),
+    tags: selectedTags.value,
+    page: newPage,
+    source: selectedSearch.value,
+  })
 
   const payload = {
     query: searchText.value.trim(),
@@ -221,6 +236,34 @@ function handlePageChange(newPage: number) {
     fetchEUR(payload)
   }
 }
+
+onMounted(() => {
+  const ctx = itemsStore.searchContext
+  if (ctx.query) {
+    searchText.value = ctx.query
+    selectedTags.value = ctx.tags.length ? ctx.tags : [availableTags.value[0]]
+    // Use the store setter for page, don't assign currentPage.value directly
+    itemsStore.setCurrentPage(ctx.page || 1)
+    selectedSearch.value = ctx.source
+
+    if (ctx.source === 'pas') {
+      fetchPAS({
+        query: ctx.query,
+        tags: ctx.tags,
+        page: ctx.page,
+      })
+    } else {
+      fetchEUR({
+        query: ctx.query,
+        tags: ctx.tags,
+        page: ctx.page,
+      })
+    }
+    hasSearched.value = true
+  }
+})
+
+
 </script>
 
 <style scoped lang="scss">
