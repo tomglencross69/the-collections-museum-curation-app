@@ -1,18 +1,40 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 
 export const useItemsStore = defineStore('items', {
   state: () => ({
-    pasItems: [] as any[],
-    eurItems: [] as any[],
+    items: [] as any[],
+    loading: false,
+    error: null as string | null,
+    currentPage: 1,
+    totalPages: 1,
+    selectedItem: null as any | null,
   }),
   actions: {
-    setItems(source: 'pas' | 'eur', newItems: any[]) {
-      if (source === 'pas') this.pasItems = newItems
-      else this.eurItems = newItems
+    setItems(items: any[]) {
+      this.items = items
     },
-    getItemById(source: 'pas' | 'eur', id: string | number) {
-      const items = source === 'pas' ? this.pasItems : this.eurItems
-      return items.find(item => item.id === id)
-    }
-  }
+    setLoading(loading: boolean) {
+      this.loading = loading
+    },
+    setError(error: string | null) {
+      this.error = error
+    },
+    setCurrentPage(page: number) {
+      this.currentPage = page
+    },
+    setTotalPages(total: number) {
+      this.totalPages = total
+    },
+    setSelectedItem(item: any) {
+      this.selectedItem = item
+    },
+    reset() {
+      this.items = []
+      this.loading = false
+      this.error = null
+      this.currentPage = 1
+      this.totalPages = 1
+      this.selectedItem = null  
+    },
+  },
 })

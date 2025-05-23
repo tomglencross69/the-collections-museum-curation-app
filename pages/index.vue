@@ -1,89 +1,121 @@
 <template>
-    <div>
-<NavBar/>
-<CurrentlySearching
-:selected-search="selectedSearch"
-@update-selected-search="selectedSearch = $event"
-/>
+  <div>
+    <NavBar />
 
-<SearchBar
-v-model="searchText"
-@search="handleSearch"
-:placeholder="placeholderText"/>
+    <CurrentlySearching
+      :selected-search="selectedSearch"
+      @update-selected-search="selectedSearch = $event"
+    />
 
-<TagsBar
-:selected-search="selectedSearch"
-:tags="availableTags"
-:selected-tags="selectedTags"
-@update:selected-tags="selectedTags = $event"/>
+    <SearchBar
+      v-model="searchText"
+      @search="handleSearch"
+      :placeholder="placeholderText"
+    />
 
-<!-- LOADING AND ERROR STATE -->
-<div v-if="loading" class="text-blue-600 font-semibold my-2">Loading results...</div>
-<div v-if="error" class="text-red-600 font-semibold my-2">{{ error }}</div>
-<div v-if="hasSearched && !loading && !error && items.length === 0" class="text-gray-600 my-2 mx-1">
-  No results found.
-</div>
+    <TagsBar
+      :selected-search="selectedSearch"
+      :tags="availableTags"
+      :selected-tags="selectedTags"
+      @update:selected-tags="selectedTags = $event"
+    />
 
-
-<SearchResultsList
-  :items="items"
-  :selected-search="selectedSearch"
-/>
-
-<Pagination
-  v-if="totalPages > 1"
-  :current-page="currentPage"
-  :total-pages="totalPages"
-  @update:page="handlePageChange"
-/>
-
+    <!-- LOADING AND ERROR STATE -->
+    <div v-if="itemsStore.loading" class="text-blue-600 font-semibold my-2">
+      Loading results...
     </div>
+    <div v-if="itemsStore.error" class="text-red-600 font-semibold my-2">
+      {{ itemsStore.error }}
+    </div>
+    <div
+      v-if="hasSearched && !itemsStore.loading && !itemsStore.error && itemsStore.items.length === 0"
+      class="text-gray-600 my-2 mx-1"
+    >
+      No results found.
+    </div>
+
+    <SearchResultsList
+      :items="itemsStore.items"
+      :selected-search="selectedSearch"
+    />
+
+    <Pagination
+      v-if="itemsStore.totalPages > 1"
+      :current-page="itemsStore.currentPage"
+      :total-pages="itemsStore.totalPages"
+      @update:page="handlePageChange"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
+import { ref, computed, watch, watchEffect } from 'vue'
+import { useItemsStore } from '@/stores/items'
 
-import {ref, computed, watch} from 'vue'
-import { testDataPAS, testDataEUR } from '@/test-data/testData'
+const itemsStore = useItemsStore()
 
 const selectedSearch = ref('pas')
-const searchText = ref("")
+const searchText = ref('')
 const selectedTags = ref<string[]>([])
-const items = ref<any[]>([])
-const loading = ref(false)
-const error = ref<string | null>(null)
-const currentPage = ref(1)
-const totalPages = ref(1)
 const hasSearched = ref(false)
 
+const placeholderText = computed(() =>
+  selectedSearch.value === 'eur'
+    ? 'Search archaeological sites...'
+    : 'Search finds...'
+)
 
-const handleSearch = async () => {
-  hasSearched.value = true
-  currentPage.value = 1
-    const payload = {
-        query: searchText.value.trim(),
-        tags: selectedTags.value,
-        page: currentPage.value
-    }
+const availableTags = computed(() =>
+  selectedSearch.value === 'eur'
+    ? ['All', 'Archaeology', 'Art', 'Industrial Heritage', 'Manuscripts', 'Migration', 'Photography']
+    : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
+)
 
-    if (!payload.query) {
-      items.value = []
-      return
-    }
+watch(selectedSearch, () => {
+  resetPage()
+})
 
-    if (selectedSearch.value === 'pas') {
-        fetchPAS(payload) 
-    } else {
-        fetchEUR(payload)
-    }
+watchEffect(() => {
+  if (!selectedTags.value.length) {
+    selectedTags.value = [availableTags.value[0]]
+  }
+})
+
+function resetPage() {
+  searchText.value = ''
+  selectedTags.value = [availableTags.value[0]]
+  hasSearched.value = false
+  itemsStore.reset()
 }
 
-// FETCHING FROM PAS
-async function fetchPAS(payload: {query: string; tags: string[]; page?: number}) {
-  loading.value = true
-  error.value = null
-  items.value = []
+async function handleSearch() {
+  hasSearched.value = true
+  itemsStore.setCurrentPage(1)
 
-   const tagToFilter: Record<string, string> = {
+  const payload = {
+    query: searchText.value.trim(),
+    tags: selectedTags.value,
+    page: itemsStore.currentPage,
+  }
+
+  if (!payload.query) {
+    itemsStore.setItems([])
+    return
+  }
+
+  if (selectedSearch.value === 'pas') {
+    await fetchPAS(payload)
+  } else {
+    await fetchEUR(payload)
+  }
+}
+
+async function fetchPAS(payload: { query: string; tags: string[]; page?: number }) {
+  itemsStore.setLoading(true)
+  itemsStore.setError(null)
+  itemsStore.setItems([])
+
+  const tagToFilter: Record<string, string> = {
     All: '',
     Coin: '/objectType/COIN',
     Hoard: '/objectType/HOARD',
@@ -94,52 +126,42 @@ async function fetchPAS(payload: {query: string; tags: string[]; page?: number})
   }
 
   try {
-const page = payload.page || 1
+    const page = payload.page || 1
+    const selectedTag = payload.tags.length ? payload.tags[0] : 'All'
+    const tagValue = tagToFilter[selectedTag] || ''
+    const queryPart = encodeURIComponent(payload.query)
+    const tagFilter = tagValue ? `/sort/objectType${tagValue}` : ''
+    const url = `https://finds.org.uk/database/search/results/q/${queryPart}${tagFilter}/thumbnail/1/page/${page}/format/json`
 
-const selectedTag = payload.tags.length ? payload.tags[0] : 'All'
+    const res = await fetch(url)
+    if (!res.ok) {
+      const text = await res.text()
+      throw new Error(`PAS API error: ${res.statusText} - ${text}`)
+    }
 
-const tagValue = tagToFilter[selectedTag] || ''
-
-const queryPart = encodeURIComponent(payload.query)
-
-const tagFilter = tagValue ? `/sort/objectType${tagValue}` : ''
-
-const url = `https://finds.org.uk/database/search/results/q/${queryPart}${tagFilter}/thumbnail/1/page/${page}/format/json`
-
-console.log("fetching URL", url)
-
-const res = await fetch(url)
-
-if (!res.ok) {
-  const text = await res.text()
-  console.log('error response text',text)
-throw new Error(`PAS API error: ${res.statusText}`)
-}
-
-const data = await res.json()
-
-items.value = data.results || []
-currentPage.value = data.meta.currentPage || 1
-totalPages.value = Math.ceil(data.meta.totalResults / data.meta.resultsPerPage)
-  } catch (e:any) {
-    error.value = e.message || 'Unknown error'
+    const data = await res.json()
+    itemsStore.setItems(data.results || [])
+    itemsStore.setCurrentPage(data.meta.currentPage || 1)
+    itemsStore.setTotalPages(Math.ceil(data.meta.totalResults / data.meta.resultsPerPage))
+  } catch (e: any) {
+    itemsStore.setError(e.message || 'Unknown error')
   } finally {
-    loading.value = false
+    itemsStore.setLoading(false)
   }
 }
 
-//FETCHING FROM EUROPEANA
 async function fetchEUR(payload: { query: string; tags: string[]; page?: number }) {
-  loading.value = true;
-  error.value = null;
-  items.value = [];
-  const config = useRuntimeConfig();
-const apiKey = config.public.europeanaApi;
+  itemsStore.setLoading(true)
+  itemsStore.setError(null)
+  itemsStore.setItems([])
+
+  const config = useRuntimeConfig()
+  const apiKey = config.public.europeanaApi
 
   try {
-    const page = payload.page || 1;
-    const rows = 12;
-    const start = (page - 1) * rows + 1;
+    const page = payload.page || 1
+    const rows = 12
+    const start = (page - 1) * rows + 1
 
     const tagToCollection: Record<string, string> = {
       Archaeology: 'archaeology',
@@ -156,104 +178,50 @@ const apiKey = config.public.europeanaApi;
       qf = `collection:${tagToCollection[selectedTag]}`
     }
 
-      const url = new URL("https://api.europeana.eu/record/v2/search.json")
+    const url = new URL('https://api.europeana.eu/record/v2/search.json')
     const params = {
       wskey: apiKey,
       query: payload.query || '*',
       rows: rows.toString(),
       start: start.toString(),
-      profile: "standard",
+      profile: 'standard',
     }
-    if (qf) {
-      params['qf'] = qf
-    }
+    if (qf) params['qf'] = qf
     url.search = new URLSearchParams(params).toString()
 
-    const res = await fetch(url);
-
+    const res = await fetch(url)
     if (!res.ok) {
-      const text = await res.text();
-      console.log("Europeana API error:", text);
-      throw new Error(`Europeana API error: ${res.statusText}`);
+      const text = await res.text()
+      throw new Error(`Europeana API error: ${res.statusText} - ${text}`)
     }
 
-    const data = await res.json();
-
-    items.value = data.items || [];
-    currentPage.value = page;
-    totalPages.value = Math.ceil((data.totalResults || 0) / rows);
+    const data = await res.json()
+    itemsStore.setItems(data.items || [])
+    itemsStore.setCurrentPage(page)
+    itemsStore.setTotalPages(Math.ceil((data.totalResults || 0) / rows))
   } catch (e: any) {
-    error.value = e.message || "Unknown error";
+    itemsStore.setError(e.message || 'Unknown error')
   } finally {
-    loading.value = false;
+    itemsStore.setLoading(false)
   }
 }
 
 function handlePageChange(newPage: number) {
-  currentPage.value = newPage
-  
+  itemsStore.setCurrentPage(newPage)
+
+  const payload = {
+    query: searchText.value.trim(),
+    tags: selectedTags.value,
+    page: newPage,
+  }
+
   if (selectedSearch.value === 'pas') {
-    fetchPAS({
-      query: searchText.value.trim(),
-      tags: selectedTags.value,
-      page: newPage
-    })
+    fetchPAS(payload)
   } else {
-    fetchEUR({
-      query: searchText.value.trim(),
-      tags: selectedTags.value,
-      page: newPage
-    })
+    fetchEUR(payload)
   }
 }
-
-const placeholderText = computed(() =>
-selectedSearch.value === 'eur'
-? 'Search archaeological sites...'
-: 'Search finds...'
-)
-
-const availableTags = computed(() => {
-  return selectedSearch.value === 'eur'
-  ? ['All', 'Archaeology', 'Art', 'Industrial Heritage', 'Manuscripts', 'Migration', 'Photography']
-  : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
-})
-
-function resetPage() {
-  searchText.value = "";
-  selectedTags.value = [availableTags.value[0]];
-  items.value = [];
-  error.value = null;
-  loading.value = false;
-  currentPage.value = 1;
-  totalPages.value = 1;
-  hasSearched.value = false;
-}
-
-watch(selectedSearch, () => {
-  resetPage()
-})
-watchEffect(() => {
-  selectedTags.value = [availableTags.value[0]]
-})
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped lang="scss">
 </style>
-
-
-
-<!-- // TEST DATA LOGIC
-// const fetchPAS = (payload: {query: string, tags: string[]}) => {
-//     console.log('Calling Portable Antiquities Scheme API with:', payload)
-// }
-
-// const fetchEUR = (payload: {query: string, tags: string[]}) => {
-//     console.log('Calling Megalithic Portal API with:', payload)
-// } -->
-
-<!-- // TEST DATA LOGIC
-// const items = computed(() =>
-//   selectedSearch.value === 'pas' ? testDataPAS : testDataEUR
-// ) -->

@@ -1,5 +1,7 @@
 <template>
-  <div class="exhibit-wrapper flex flex-col gap-2">
+  <div 
+  @click="goToItem"
+  class="exhibit-wrapper flex flex-col gap-2">
     <img
       :src="imageUrl || 'https://placehold.co/600x400'"
       class="exhibit-image w-full h-40 object-cover rounded px-2"
@@ -16,6 +18,11 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useItemsStore } from '@/stores/items'
+
+const router = useRouter()
+const store = useItemsStore()
 
 const props = defineProps<{
   item: {
@@ -35,6 +42,13 @@ const imageUrl = computed(() =>
     ? `https://finds.org.uk/${props.item.imagedir}${props.item.filename}`
     : ''
 )
+
+function goToItem() {
+  store.setSelectedItem(props.item)
+  const id = props.item.id 
+  const source = props.item.source || 'pas' // fallback
+  router.push(`/searchresults/pas/${id}`)
+}
 
 
 // THUMBNAILS BLOCKED BY CORB

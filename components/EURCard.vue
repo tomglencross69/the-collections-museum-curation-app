@@ -1,5 +1,7 @@
 <template>
-  <div class="exhibit-wrapper flex flex-col gap-2">
+  <div 
+  @click="goToItem"
+  class="exhibit-wrapper flex flex-col gap-2">
     <img
       v-if="item.edmPreview?.[0]"
       :src="item.edmPreview[0]"
@@ -21,7 +23,29 @@
 </template>
 
 <script setup lang="ts">
+
+
+import { useRouter } from 'vue-router'
+import { useItemsStore } from '@/stores/items'
+
+const router = useRouter()
+const store = useItemsStore()
 const props = defineProps<{
   item: any
 }>()
+console.log('EUR item:', props.item)
+
+const goToItem = () => {
+  store.setSelectedItem(props.item)
+
+  const rawId = props.item.id
+  if (!rawId || typeof rawId !== 'string') {
+    console.warn('Invalid or missing item.id in EURCard:', props.item)
+    return
+  }
+
+  const cleanId = rawId.replace(/^\//, '') 
+  router.push(`/searchresults/eur/${encodeURIComponent(cleanId)}`)
+}
+
 </script>
