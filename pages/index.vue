@@ -52,6 +52,9 @@
 import { ref, computed, watch, watchEffect } from 'vue'
 import { useItemsStore } from '@/stores/items'
 import {onMounted} from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 const itemsStore = useItemsStore()
 
@@ -273,6 +276,21 @@ onMounted(() => {
     
     // The items and pagination are already restored by restoreSearchContext
     // No need to fetch again since we have the cached results
+  }
+})
+
+onMounted(() => {
+  const searchParam = route.query.search
+  if (searchParam === 'eur' || searchParam === 'pas') {
+    selectedSearch.value = searchParam
+    itemsStore.setCurrentSearchSource(searchParam)
+  }
+
+  const ctx = itemsStore.restoreSearchContext(selectedSearch.value as 'pas' | 'eur')
+  if (ctx && ctx.query) {
+    searchText.value = ctx.query
+    selectedTags.value = ctx.tags.length ? ctx.tags : [availableTags.value[0]]
+    hasSearched.value = true
   }
 })
 </script>
