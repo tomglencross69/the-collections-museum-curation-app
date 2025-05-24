@@ -72,8 +72,28 @@ const availableTags = computed(() =>
     : ['All', 'Coin', 'Hoard', 'Vessel', 'Finger Ring', 'Brooch', 'Weight']
 )
 
-watch(selectedSearch, () => {
-  resetPage()
+watch(selectedSearch, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    // Save current state before switching
+    if (oldVal && hasSearched.value) {
+      itemsStore.setSearchContext({
+        query: searchText.value.trim(),
+        tags: selectedTags.value,
+        page: itemsStore.currentPage,
+        source: oldVal as 'pas' | 'eur',
+      })
+    }
+    
+    // Try to restore the new search context
+    const ctx = itemsStore.restoreSearchContext(newVal as 'pas' | 'eur')
+    if (ctx && ctx.query) {
+      searchText.value = ctx.query
+      selectedTags.value = ctx.tags
+      hasSearched.value = true
+    } else {
+      resetPage()
+    }
+  }
 })
 
 watchEffect(() => {
@@ -92,11 +112,12 @@ function resetPage() {
 async function handleSearch() {
   hasSearched.value = true
   itemsStore.setCurrentPage(1)
+  itemsStore.setCurrentSearchSource(selectedSearch.value as 'pas' | 'eur')
 
   const payload = {
     query: searchText.value.trim(),
     tags: selectedTags.value,
-    page: itemsStore.currentPage,
+    page: 1, // Always start from page 1 on new search
   }
 
   if (!payload.query) {
@@ -110,11 +131,12 @@ async function handleSearch() {
     await fetchEUR(payload)
   }
 
-    itemsStore.setSearchContext({
+  // Set search context AFTER successful fetch
+  itemsStore.setSearchContext({
     query: searchText.value.trim(),
     tags: selectedTags.value,
-    page: itemsStore.currentPage,
-    source: selectedSearch.value,
+    page: 1,
+    source: selectedSearch.value as 'pas' | 'eur',
   })
 }
 
@@ -217,6 +239,7 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
 function handlePageChange(newPage: number) {
   itemsStore.setCurrentPage(newPage)
   
+  // Update search context with new page
   itemsStore.setSearchContext({
     query: searchText.value.trim(),
     tags: selectedTags.value,
@@ -238,32 +261,20 @@ function handlePageChange(newPage: number) {
 }
 
 onMounted(() => {
-  const ctx = itemsStore.searchContext
-  if (ctx.query) {
+  // Try to restore the last active search context
+  const lastSource = itemsStore.currentSearchSource
+  const ctx = itemsStore.restoreSearchContext(lastSource)
+  
+  if (ctx && ctx.query) {
     searchText.value = ctx.query
     selectedTags.value = ctx.tags.length ? ctx.tags : [availableTags.value[0]]
-    // Use the store setter for page, don't assign currentPage.value directly
-    itemsStore.setCurrentPage(ctx.page || 1)
     selectedSearch.value = ctx.source
-
-    if (ctx.source === 'pas') {
-      fetchPAS({
-        query: ctx.query,
-        tags: ctx.tags,
-        page: ctx.page,
-      })
-    } else {
-      fetchEUR({
-        query: ctx.query,
-        tags: ctx.tags,
-        page: ctx.page,
-      })
-    }
     hasSearched.value = true
+    
+    // The items and pagination are already restored by restoreSearchContext
+    // No need to fetch again since we have the cached results
   }
 })
-
-
 </script>
 
 <style scoped lang="scss">
