@@ -28,13 +28,21 @@
       </div>
 
       <!-- Add/Remove Buttons -->
-      <div class="py-1 flex flex-col gap-2 items-start">
-        <button class="bg-customYellow font-semibold p-1 rounded w-fit">
-          Add to your collection
-        </button>
-        <button class="bg-customYellow font-semibold p-1 rounded w-fit">
-          Remove from your collection
-        </button>
+      <div v-if="item" class="py-1 flex flex-col gap-2 items-start">
+      <button
+  class="bg-customYellow font-semibold p-1 rounded w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+  :disabled="isSaved"
+  @click="addToPAS"
+>
+  Add to your collection
+</button>
+<button
+  class="bg-customYellow font-semibold p-1 rounded w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+  :disabled="!isSaved"
+  @click="removeFromPAS"
+>
+  Remove from your collection
+</button>
       </div>
     </div>
 
@@ -57,7 +65,7 @@
       <!-- Currently Searching Section -->
       <div>
         <h2>Currently Searching:</h2>
-        <div class="flex gap-2 flex-wrap mt-1">
+        <div class="flex gap-2 flex-wrap mt-1 mb-4">
           <div class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded">
             Portable Antiquities Scheme
           </div>
@@ -72,33 +80,59 @@
 
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useItemsStore } from '@/stores/items'
+import { useUserStore } from '@/stores/users'
 import { useRoute } from 'vue-router'
+
+// Stores
 const store = useItemsStore()
+const userStore = useUserStore()
 const route = useRoute()
 
-
+// Computed item
 const item = computed(() => {
   if (store.selectedItem) return store.selectedItem
   const id = route.params.id
   return store.items.find(i => i.id == id || i._id == id || i.identifier == id)
 })
 
+// Computed ID
+const itemId = computed(() => item.value?.id)
+
+// Fixed: Use the correct method name from your store
+const isSaved = computed(() => item.value ? userStore.isInPAS(item.value.id) : false)
+
+function addToPAS() {
+  // Fixed: Use the correct method name from your store
+  if (item.value) userStore.addToPAS(item.value)
+}
+
+function removeFromPAS() {
+  // Fixed: Use the correct method name from your store
+  if (item.value?.id) userStore.removeFromPAS(item.value.id)
+}
+
+// HTML Decode helper
 function decodeHTMLEntities(str: string) {
   const txt = document.createElement('textarea')
   txt.innerHTML = str
   return txt.value
 }
 
+// Computed Description
 const decodedDescription = computed(() =>
-  decodeHTMLEntities(item.value.description)
+  item.value?.description ? decodeHTMLEntities(item.value.description) : ''
 )
 
+// Computed image URL
 const imageUrl = computed(() =>
-  item.value.imagedir && item.value.filename
+  item.value?.imagedir && item.value?.filename
     ? `https://finds.org.uk/${item.value.imagedir}${item.value.filename}`
     : ''
 )
 
-console.log(item, "<<<item in PAS")
+// Debug logging
+console.log(item.value, '<<< item')
+console.log(itemId.value, '<<< itemId')
 </script>
