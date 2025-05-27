@@ -10,7 +10,7 @@
     />
     <div class="exhibit-card-text p-1 text-sm sm:text-base bg-customYellow rounded-b-lg h-full">
       <h3 class="font-semibold">
-        {{ item.title?.[0] || 'Untitled' }}
+        {{ item.title[0][0].toUpperCase()+item.title[0].slice(1) || 'Untitled' }}
       </h3>
       <p class="text-gray-600 italic">
         {{ item.dataProvider?.[0] || 'Unknown collection' }}
