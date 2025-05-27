@@ -3,11 +3,11 @@
     <!-- Top row: burger + heading + usericon -->
     <div class="flex items-center justify-between sm:justify-start gap-4 relative z-10">
       <BurgerMenu />
-
+      <NuxtLink to="/">
       <h1 class="header text-center sm:text-left flex-1">
         TheCollections
       </h1>
-
+</NuxtLink>
       <a href="/user">
         <UserIcon/>
       </a>

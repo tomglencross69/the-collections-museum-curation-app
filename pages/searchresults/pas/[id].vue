@@ -10,14 +10,14 @@
     class="text-xl font-semibold hover:underline mb-1"
     @click="$router.back()"
   >
-    ← Back to search
+    ← Back 
   </button>
 
   <!-- Responsive Layout Container -->
   <div class="flex flex-col sm:flex-row gap-1 max-w-6xl mx-auto">
     
     <!-- LEFT COLUMN: Item Info + Add/Remove Buttons -->
-    <div class="sm:w-1/2 sm:text-xl">
+    <div class="sm:w-1/2 sm:text-xl break-words">
       <!-- Item Info -->
       <div class="my-2 p-4 bg-customYellow">
         <div v-if="item">
@@ -57,6 +57,7 @@
     <div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
       
       <!-- QUERY SECTION -->
+      <div v-if="store.pasSearchContext.query">
       <div>
   <h2>Your search query:</h2>
   <div class="flex gap-2 flex-wrap mt-1">
@@ -80,11 +81,13 @@
           </div>
         </div>
       </div>
+      </div>
 
 
       <!-- Currently Searching Section -->
       <div>
-        <h2>Currently Searching:</h2>
+        <h2 v-if="store.pasSearchContext.query">Currently Searching:</h2>
+        <h2 v-else>Saved from:</h2>
         <div class="flex gap-2 flex-wrap mt-1 mb-4">
           <div class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded">
             Portable Antiquities Scheme

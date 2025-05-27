@@ -38,12 +38,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 import { useUserStore } from '@/stores/users'
 const selectedCollection = ref('pas')
 
 const userStore = useUserStore()
+
+const items = computed(() => {
+    return selectedCollection.value === 'pas' ? 
+    userStore.user.savedItemsPAS
+    : userStore.user.savedItemsEUR
+})
 
 
 </script>

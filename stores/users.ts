@@ -33,5 +33,8 @@ export const useUserStore = defineStore('user', {
     isInEUR(itemId: string | number) {
       return this.user.savedItemsEUR.some((i: any) => i.id === itemId)
     },
-  }
+  },
+  persist: {
+    storage: localStorage,
+  } 
 })
