@@ -1,52 +1,75 @@
 <template>
   <button
-  class="text-xl font-semibold hover:underline" @click="$router.back()">← Back</button>
-  <div class="my-2 max-w-xl mx-auto p-4 bg-customYellow">
-    <div v-if="item">
-      <h1 class="text-2xl font-bold mb-4">{{ item.objecttype[0]+item.objecttype.slice(1).toLowerCase() }} ({{  item.broadperiod[0]+item.broadperiod.slice(1).toLowerCase()  }})</h1>
-      <img v-if="imageUrl" :src="imageUrl || 'https://placehold.co/600x400'" class="mb-4" />
-      <h2><b>Material:</b> {{item.materialTerm }}</h2>
-      <h2><b>Period:</b> {{ item.broadperiod[0]+item.broadperiod.slice(1).toLowerCase() }}</h2>
-      <h2><b>County:</b> {{ item.county }}</h2>
-      <p v-if="item.description"><b>Description: </b>{{ decodedDescription }}</p>
+    class="text-xl font-semibold hover:underline mb-1"
+    @click="$router.back()"
+  >
+    ← Back to search
+  </button>
+
+  <!-- Responsive Layout Container -->
+  <div class="flex flex-col sm:flex-row gap-1 max-w-6xl mx-auto">
+    
+    <!-- LEFT COLUMN: Item Info + Add/Remove Buttons -->
+    <div class="sm:w-1/2 sm:text-xl">
+      <!-- Item Info -->
+      <div class="my-2 p-4 bg-customYellow">
+        <div v-if="item">
+          <h1 class="text-2xl font-bold mb-4">
+            {{ item.objecttype[0] + item.objecttype.slice(1).toLowerCase() }} 
+            ({{ item.broadperiod[0] + item.broadperiod.slice(1).toLowerCase() }})
+          </h1>
+          <img v-if="imageUrl" :src="imageUrl || 'https://placehold.co/600x400'" class="mb-4" />
+          <h2><b>Material:</b> {{ item.materialTerm }}</h2>
+          <h2><b>Period:</b> {{ item.broadperiod[0] + item.broadperiod.slice(1).toLowerCase() }}</h2>
+          <h2><b>County:</b> {{ item.county }}</h2>
+          <p v-if="item.description"><b>Description:</b> {{ decodedDescription }}</p>
+        </div>
+        <div v-else class="text-gray-500">No item found.</div>
+      </div>
+
+      <!-- Add/Remove Buttons -->
+      <div class="py-1 flex flex-col gap-2 items-start">
+        <button class="bg-customYellow font-semibold p-1 rounded w-fit">
+          Add to your collection
+        </button>
+        <button class="bg-customYellow font-semibold p-1 rounded w-fit">
+          Remove from your collection
+        </button>
+      </div>
     </div>
-    <div v-else class="text-gray-500">No item found.</div>
-  </div>
 
-  <!-- ADD TO YOUR COLLECTION -->
-   <div class='max-w-xl mx-auto py-2 flex flex-col gap-4'>Add to your collection</div>
+    <!-- RIGHT COLUMN: Tags + Currently Searching -->
+    <div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
+      <!-- Tags Section -->
+      <div>
+        <h2>Tags:</h2>
+        <div class="flex gap-2 flex-wrap mt-1">
+          <div
+            v-for="tag in store.pasSearchContext.tags"
+            :key="tag"
+            class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded"
+          >
+            {{ tag }}
+          </div>
+        </div>
+      </div>
 
-  <!-- TAGS AND CURRENTLY SEARCHING -->
-<div class="max-w-xl mx-auto py-2 flex flex-col gap-4">
-  <!-- Tags Section -->
-  <div>
-    <h2 >Tags:</h2>
-    <div class="flex gap-2 flex-wrap mt-1">
-      <div
-        v-for="tag in store.pasSearchContext.tags"
-        :key="tag"
-        class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded"
-      >
-        {{ tag }}
+      <!-- Currently Searching Section -->
+      <div>
+        <h2>Currently Searching:</h2>
+        <div class="flex gap-2 flex-wrap mt-1">
+          <div class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded">
+            Portable Antiquities Scheme
+          </div>
+          <div class="px-2 py-1 text-xs sm:text-base border border-black rounded">
+            Europeana
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Currently Searching Section -->
-  <div>
-    <h2 >Currently Searching:</h2>
-    <div class="flex gap-2 flex-wrap mt-1">
-      <div class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded">
-        Portable Antiquities Scheme
-      </div>
-      <div class="px-2 py-1 text-xs sm:text-base border border-black rounded">
-        Europeana
-      </div>
-    </div>
-  </div>
-</div>
-
 </template>
+
 
 <script setup lang="ts">
 import { useItemsStore } from '@/stores/items'
