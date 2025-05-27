@@ -1,0 +1,53 @@
+<template>
+ 
+<div class="wrapper">
+
+    <!-- Saved Collection Toggle -->
+     <div class="saved-collection-toggle-wrapper">
+    <span class="saved-collection-text">Your saved collection from:</span>
+    <div class="collection-buttons flex gap-x-2">
+      <button
+      @click="selectedCollection = 'pas'"
+      :class="[
+        'px-2 py-1 my-1 border border-black text-left text-sm rounded min-w-[50px] whitespace-nowrap', 
+        selectedCollection === 'pas' ? 'bg-black text-white' : 'bg-white text-black']">
+        The Portable Antiquities Scheme
+      </button>
+      <button
+      @click="selectedCollection = 'eur'"
+      :class="[
+        'px-2 py-1 my-1 border border-black text-left text-sm rounded whitespace-nowrap min-w-[50px]', 
+        selectedCollection === 'eur' ? 'bg-black text-white' : 'bg-white text-black'
+        ]">
+        Europeana
+      </button>
+    </div>
+  </div>
+
+  <!-- Gallery list -->
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+    <template v-if="selectedCollection === 'pas'">
+      <PASCard v-for="item in items" :key="item.recordID" :item="item" />
+    </template>
+    <template v-else>
+      <EURCard v-for="item in items" :key="item.recordID" :item="item" />
+    </template>
+  </div>
+  </div>
+ 
+</template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+import { useUserStore } from '@/stores/users'
+const selectedCollection = ref('pas')
+
+const userStore = useUserStore()
+
+
+</script>
+
+<style lang="scss" scoped>
+
+</style>

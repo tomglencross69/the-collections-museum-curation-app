@@ -37,14 +37,14 @@
       <!-- Add/Remove Buttons -->
       <div v-if="item" class="py-1 flex flex-col gap-2 items-start">
       <button
-  class="bg-customYellow font-semibold p-1 rounded w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+  class="bg-customYellow font-semibold p-1 rounded-b w-fit disabled:opacity-50 disabled:cursor-not-allowed"
   :disabled="isSaved"
   @click="addToPAS"
 >
   Add to your collection
 </button>
 <button
-  class="bg-customYellow font-semibold p-1 rounded w-fit disabled:opacity-50 disabled:cursor-not-allowed"
+  class="bg-customYellow font-semibold p-1 rounded-b w-fit disabled:opacity-50 disabled:cursor-not-allowed"
   :disabled="!isSaved"
   @click="removeFromPAS"
 >

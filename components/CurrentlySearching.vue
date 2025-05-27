@@ -36,7 +36,7 @@ const emit = defineEmits(['update-selected-search'])
 const setSearch = (search) => {
   const url = new URL(window.location.href)
   url.searchParams.set('search', search)
-  window.location.href = url.toString() // Full page reload
+  window.location.href = url.toString() 
 }
 
 </script>
