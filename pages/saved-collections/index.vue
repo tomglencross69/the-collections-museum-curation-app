@@ -38,12 +38,20 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 import { useUserStore } from '@/stores/users'
-const selectedCollection = ref('pas')
 
+const route = useRoute()
+const router = useRouter()
 const userStore = useUserStore()
+
+const selectedCollection = ref(route.query.collection === 'eur' ? 'eur' : 'pas')
+
+watch(selectedCollection, (newVal) => {
+  router.replace({ query: { ...route.query, collection: newVal } })
+})
 
 const items = computed(() => {
     return selectedCollection.value === 'pas' ? 
