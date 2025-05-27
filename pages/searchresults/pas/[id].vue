@@ -1,4 +1,11 @@
 <template>
+  <!-- Toast notification -->
+<div
+  v-if="showToast"
+  class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-300"
+>
+  {{ toastMessage }}
+</div>
   <button
     class="text-xl font-semibold hover:underline mb-1"
     @click="$router.back()"
@@ -48,9 +55,21 @@
 
     <!-- RIGHT COLUMN: Tags + Currently Searching -->
     <div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
+      
+      <!-- QUERY SECTION -->
+      <div>
+  <h2>Your search query:</h2>
+  <div class="flex gap-2 flex-wrap mt-1">
+    <div
+      class="px-2 py-1 text-xs text-white bg-black sm:text-base border border-black rounded"
+    >
+      {{ store.pasSearchContext.query }}
+    </div>
+  </div>
+</div>
       <!-- Tags Section -->
       <div>
-        <h2>Tags:</h2>
+        <h2>Your search tags:</h2>
         <div class="flex gap-2 flex-wrap mt-1">
           <div
             v-for="tag in store.pasSearchContext.tags"
@@ -61,6 +80,7 @@
           </div>
         </div>
       </div>
+
 
       <!-- Currently Searching Section -->
       <div>
@@ -80,10 +100,13 @@
 
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useItemsStore } from '@/stores/items'
 import { useUserStore } from '@/stores/users'
 import { useRoute } from 'vue-router'
+
+const toastMessage = ref('')
+const showToast = ref(false)
 
 // Stores
 const store = useItemsStore()
@@ -106,11 +129,21 @@ const isSaved = computed(() => item.value ? userStore.isInPAS(item.value.id) : f
 function addToPAS() {
   // Fixed: Use the correct method name from your store
   if (item.value) userStore.addToPAS(item.value)
+   showToastMessage('Item added to your collection')
 }
 
 function removeFromPAS() {
   // Fixed: Use the correct method name from your store
   if (item.value?.id) userStore.removeFromPAS(item.value.id)
+  showToastMessage('Item removed from your collection')
+}
+
+function showToastMessage(message: string) {
+  toastMessage.value = message
+  showToast.value = true
+  setTimeout(() => {
+    showToast.value = false
+  }, 3000) // Hide after 3 seconds
 }
 
 // HTML Decode helper
