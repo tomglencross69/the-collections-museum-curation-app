@@ -1,7 +1,5 @@
 <template>
   <div>
-    <NavBar />
-
     <CurrentlySearching
       :selected-search="selectedSearch"
       @update-selected-search="selectedSearch = $event"

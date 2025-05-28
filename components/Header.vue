@@ -8,7 +8,7 @@
       TheCollections
     </h1>
   </NuxtLink>
-  <a href="/user">
+  <a href="/account">
     <UserIcon />
   </a>
 </div>

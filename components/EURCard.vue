@@ -1,7 +1,7 @@
 <template>
   <div 
   @click="goToItem"
-  class="exhibit-wrapper flex flex-col gap-2">
+  class="exhibit-wrapper flex flex-col gap-2 transition transform duration-200 hover:scale-105 hover:shadow-lg cursor-pointer rounded-b-lg">
     <img
       v-if="item.edmPreview?.[0]"
       :src="item.edmPreview[0]"

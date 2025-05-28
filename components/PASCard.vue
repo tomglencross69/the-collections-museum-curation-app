@@ -1,7 +1,7 @@
 <template>
   <div 
   @click="goToItem"
-  class="exhibit-wrapper flex flex-col gap-2">
+  class="exhibit-wrapper flex flex-col gap-2 transition transform duration-200 hover:scale-105 hover:shadow-lg cursor-pointer rounded-b-lg">
     <img
       :src="imageUrl || 'https://placehold.co/600x400'"
       class="exhibit-image w-full h-40 object-cover rounded px-2"
