@@ -2,7 +2,7 @@
     <!-- Toast notification -->
 <div
   v-if="showToast"
-  class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-black text-white px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-300"
+  class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-customYellow text-black px-6 py-3 rounded shadow-lg z-50 transition-opacity duration-300"
 >
   {{ toastMessage }}
 </div>
