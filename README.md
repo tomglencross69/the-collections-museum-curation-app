@@ -57,7 +57,6 @@ pnpm dev
 bun run dev
 ```
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information on running your own development server, and on production.
----
 
 3. In order to successfully query the Europeana API and run the app locally, visit https://apis.europeana.eu/en, and follow the 'request an api key' link to make an account.
 
