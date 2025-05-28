@@ -34,7 +34,9 @@ export const useUserStore = defineStore('user', {
       return this.user.savedItemsEUR.some((i: any) => i.id === itemId)
     },
   },
-  persist: {
-    storage: localStorage,
-  } 
+   persist: typeof window !== 'undefined'
+    ? {
+        storage: window.localStorage,
+      }
+    : false,
 })

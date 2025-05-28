@@ -167,8 +167,6 @@ const imageUrl = computed(() =>
     ? `https://finds.org.uk/${item.value.imagedir}${item.value.filename}`
     : ''
 )
-
-// Debug logging
-console.log(item.value, '<<< item')
-console.log(itemId.value, '<<< itemId')
+console.log('PAS Query ON PAS SAVED:', store.pasSearchContext.query)
+console.log('EUR Query ON PAS SAVED:', store.eurSearchContext.query)
 </script>

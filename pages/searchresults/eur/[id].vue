@@ -145,5 +145,6 @@ function showToastMessage(message: string) {
   }, 3000) // Hide after 3 seconds
 }
 
-
+console.log('PAS Query ON EUR SAVED:', store.pasSearchContext.query)
+console.log('EUR Query ON EUR SAVED:', store.eurSearchContext.query)
 </script>

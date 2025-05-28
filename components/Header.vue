@@ -1,18 +1,18 @@
 <template>
   <header class="font-sans py-3">
     <!-- Top row: burger + heading + usericon -->
-    <div class="flex items-center justify-between sm:justify-start gap-4 relative z-10">
-      <BurgerMenu />
-      <NuxtLink to="/">
-      <h1 class="header text-center sm:text-left flex-1">
-        TheCollections
-      </h1>
-</NuxtLink>
-      <a href="/user">
-        <UserIcon/>
-      </a>
-      
-    </div>
+   <div class="flex items-center relative z-10 gap-4">
+  <BurgerMenu />
+  <NuxtLink to="/" class="flex-1">
+    <h1 class="header text-center sm:text-left">
+      TheCollections
+    </h1>
+  </NuxtLink>
+  <a href="/user">
+    <UserIcon />
+  </a>
+</div>
+
 
     <!-- Subheading below -->
     <h2 class="subheader mt-2 mr-20">
@@ -22,7 +22,20 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
+import { useItemsStore } from '@/stores/items'
+import { useRoute } from 'vue-router'
+import { watch } from 'vue'
+
+const store = useItemsStore()
+const route = useRoute()
+
+watch(() => route.fullPath, (newPath) => {
+  if (newPath === '/') {
+    store.setSearchContext({ query: '', tags: [], page: 1, source: 'pas' })
+    store.setSearchContext({ query: '', tags: [], page: 1, source: 'eur' })
+  }
+})
 
 
 </script>

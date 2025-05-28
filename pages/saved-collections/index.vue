@@ -40,12 +40,19 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-
+import { onBeforeMount } from 'vue'
+import { useItemsStore } from '@/stores/items'
 import { useUserStore } from '@/stores/users'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
+const store = useItemsStore()
+
+onBeforeMount(() => {
+  store.pasSearchContext = { query: '', tags: [], page: 1, items: [], totalPages: 1 }
+  store.eurSearchContext = { query: '', tags: [], page: 1, items: [], totalPages: 1 }
+})
 
 const selectedCollection = ref(route.query.collection === 'eur' ? 'eur' : 'pas')
 
