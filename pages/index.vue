@@ -63,8 +63,8 @@ const hasSearched = ref(false)
 
 const placeholderText = computed(() =>
   selectedSearch.value === 'eur'
-    ? 'Search archaeological sites...'
-    : 'Search finds...'
+    ? 'Search records...'
+    : 'Search finds and artefacts...'
 )
 
 const availableTags = computed(() =>

@@ -1,7 +1,7 @@
 <template>
     <div class="p-1 text-white bg-black text-xs">
     <div class="bg-black ">
-        <p class="text-white">TheCollections. <a href="https://www.tomglencross.com/" target="_blank" class="hover:underline">Tom Glencross.</a> 2025.</p>
+        <p class="text-white"><b>TheCollections.</b> <a href="https://www.tomglencross.com/" target="_blank" class="hover:underline">Tom Glencross.</a> 2025.</p>
       </div>
       <div>
         <p><b>Data Sources</b></p>
