@@ -1,7 +1,7 @@
 # TheCollections - Exhibition/Musuem Curation Platform
 
 # Live - here!
-(https://the-collections-museum-curation-app.vercel.app/)
+[TheCollections](https://the-collections-museum-curation-app.vercel.app/)
 
 A virtual space to explore and curate exhibitions from two heritage collections within clean and accessible UX.
 
