@@ -25,18 +25,21 @@
   </div>
 
   <!-- Gallery list -->
+   <client-only>
 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-  <template v-if="items.length === 0">
+   <template v-if="items.length === 0">
    <div>You currently have no items saved to this collection.</div>
  </template>
-    <template v-else-if="selectedCollection === 'pas'">
+    <template v-if="selectedCollection === 'pas'">
       <PASCard v-for="item in items" :key="item.recordID" :item="item" />
     </template>
     <template v-else>
       <EURCard v-for="item in items" :key="item.recordID" :item="item" />
     </template>
   </div>
-  </div>
+  </client-only>
+  
+</div>
  
 </template>
 
