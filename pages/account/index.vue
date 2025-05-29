@@ -3,7 +3,7 @@
     <h1 class="text-xl pb-5 font-semibold">Account</h1>
     <h2>Welcome, {{currentUser}}</h2>
 <p class="py-5">
-    User account functionality is currently in development - a hardcoded test-user is defined within Pinia state management.</p> <p>To launch the project in your own development server and check out how user state works within this app, please visit the <a href="https://github.com/tomglencross69/the-collections-museum-curation-app" target="_blank" class="underline">GitHub</a>.</p>
+    User account functionality is currently in development.</p> <p>A hardcoded 'test-user' is defined within Pinia state management - to launch the project in your own development server and check out how user state works, please visit the <a href="https://github.com/tomglencross69/the-collections-museum-curation-app" target="_blank" class="underline">GitHub</a>.</p>
   </section>
 </template>
 

@@ -6,7 +6,7 @@
       <NavBar class="hidden sm:block"/> 
       <slot />
     </main>
-    <div class="mx-auto w-full max-w-content max-w-1360px">
+    <div class="-mx-4 w-screen sm:mx-auto sm:max-w-content sm:w-full sm:max-w-1360px ">
       <Footer />
     </div>
   </div>

@@ -20,7 +20,7 @@ const route = useRoute()
 
 const navItems = computed(() => {
   const items = [
-    { label: 'Search', to: '/' },
+    { label: 'Search', to: '/?search=pas' },
     { label: 'Your Saved Collections', to: '/saved-collections' },
     { label: 'About', to: '/about' }
   ]

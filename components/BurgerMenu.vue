@@ -13,12 +13,12 @@
     <div
       v-if="isOpen"
       id="menuPanel"
-      class="absolute min-w-max left-0 bg-customYellow shadow-lg rounded p-4 space-y-2 sm:hidden z-50"
+      class="absolute min-w-[210px] left-0 bg-customYellow shadow-lg rounded p-4 space-y-2 sm:hidden z-50"
       @mouseleave="closeMenu"
     >
-      <a href="/" class="block text-gray-800 hover:text-black">Search</a>
-      <a href="/saved-collections" class="block text-gray-800 hover:text-black">Your saved collections</a>
-      <a href="/about" class="block text-gray-800 hover:text-black">About</a>
+      <a href="/" class="block text-gray-800 hover:text-black hover:font-semibold">Search</a>
+      <a href="/saved-collections" class="block text-gray-800 hover:text-black hover:font-semibold">Your saved collections</a>
+      <a href="/about" class="block text-gray-800 hover:text-black hover:font-semibold">About</a>
     </div>
   </div>
 </template>

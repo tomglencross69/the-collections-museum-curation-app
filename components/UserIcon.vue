@@ -4,10 +4,10 @@
       <svg 
         xmlns="http://www.w3.org/2000/svg" 
         fill="none" 
-        viewBox="0 0 24 24" 
+        viewBox="0 0 24 24 " 
         stroke-width="1.5" 
         stroke="currentColor" 
-        class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16"
+        class="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 transform transition-transform duration-200 hover:scale-[1.1]"
       >
         <path 
           stroke-linecap="round" 
