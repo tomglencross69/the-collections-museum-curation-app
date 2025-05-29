@@ -2,7 +2,7 @@
   <div ref="menuWrapper" class="relative pt-2">
     <!-- Toggle Button -->
     <button @click="toggleMenu" class="sm:hidden" ref="burgerButton" aria-expanded="isOpen.toString()" aria-controls="menuPanel" aria-label="Toggle menu">
-      <div class="space-y-2">
+      <div class="space-y-2 hover:space-y-1.5 transform transition-transform duration-200 hover:scale-[1.1]">
         <span class="block h-0.5 w-8 bg-black"></span>
         <span class="block h-0.5 w-8 bg-black"></span>
         <span class="block h-0.5 w-8 bg-black"></span>
