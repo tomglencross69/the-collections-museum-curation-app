@@ -1,50 +1,65 @@
 <template>
-  <div>
-    <CurrentlySearching
-      :selected-search="selectedSearch"
-      @update-selected-search="selectedSearch = $event"
-    />
+  <main>
+    <section aria-label="Search selection">
+      <CurrentlySearching
+        :selected-search="selectedSearch"
+        @update-selected-search="selectedSearch = $event"
+      />
+    </section>
 
-    <SearchBar
-      v-model="searchText"
-      @search="handleSearch"
-      :placeholder="placeholderText"
-    />
+    <section aria-label="Search input">
+      <SearchBar
+        v-model="searchText"
+        @search="handleSearch"
+        :placeholder="placeholderText"
+      />
+    </section>
 
-    <TagsBar
-      :selected-search="selectedSearch"
-      :tags="availableTags"
-      :selected-tags="selectedTags"
-      @update:selected-tags="selectedTags = $event"
-    />
+    <section aria-label="Filter tags">
+      <TagsBar
+        :selected-search="selectedSearch"
+        :tags="availableTags"
+        :selected-tags="selectedTags"
+        @update:selected-tags="selectedTags = $event"
+      />
+    </section>
 
     <!-- LOADING AND ERROR STATE -->
-    <div v-if="itemsStore.loading" class="text-blue-600 font-semibold my-2">
-      Loading results...
-    </div>
-    <div v-if="itemsStore.error" class="text-red-600 font-semibold my-2">
-      {{ itemsStore.error }}
-    </div>
-    <div
-      v-if="hasSearched && !itemsStore.loading && !itemsStore.error && itemsStore.items.length === 0"
-      class="text-gray-600 my-2 mx-1"
-    >
-      No results found.
-    </div>
+    <section aria-live="polite" aria-atomic="true" class="my-2 mx-1">
+      <p v-if="itemsStore.loading" class="text-blue-600 font-semibold">
+        Loading results...
+      </p>
+      <p v-if="itemsStore.error" class="text-red-600 font-semibold">
+        {{ itemsStore.error }}
+      </p>
+      <p
+        v-if="hasSearched && !itemsStore.loading && !itemsStore.error && itemsStore.items.length === 0"
+        class="text-gray-600"
+      >
+        No results found.
+      </p>
+    </section>
 
-    <SearchResultsList
-      :items="itemsStore.items"
-      :selected-search="selectedSearch"
-    />
+    <section aria-label="Search results">
+      <SearchResultsList
+        :items="itemsStore.items"
+        :selected-search="selectedSearch"
+      />
+    </section>
 
-    <Pagination
+    <nav
       v-if="itemsStore.totalPages > 1"
-      :current-page="itemsStore.currentPage"
-      :total-pages="itemsStore.totalPages"
-      @update:page="handlePageChange"
-    />
-  </div>
+      aria-label="Pagination navigation"
+    >
+      <Pagination
+        :current-page="itemsStore.currentPage"
+        :total-pages="itemsStore.totalPages"
+        @update:page="handlePageChange"
+      />
+    </nav>
+  </main>
 </template>
+
 
 <script setup lang="ts">
 import { ref, computed, watch, watchEffect } from 'vue'
@@ -118,7 +133,7 @@ async function handleSearch() {
   const payload = {
     query: searchText.value.trim(),
     tags: selectedTags.value,
-    page: 1, // Always start from page 1 on new search
+    page: 1,
   }
 
   if (!payload.query) {
@@ -132,12 +147,12 @@ async function handleSearch() {
     await fetchEUR(payload)
   }
 
-  // Set search context AFTER successful fetch
+  // Set search context AFTER fetch
   itemsStore.setSearchContext({
     query: searchText.value.trim(),
     tags: selectedTags.value,
     page: 1,
-    source: selectedSearch.value as 'pas' | 'eur',
+    source: selectedSearch.value as 'pas' | 'eur' 
   })
 }
 
@@ -210,7 +225,7 @@ async function fetchEUR(payload: { query: string; tags: string[]; page?: number 
     }
 
     const url = new URL('https://api.europeana.eu/record/v2/search.json')
-    const params = {
+    const params: Record<string, string> = {
       wskey: apiKey,
       query: payload.query || '*',
       rows: rows.toString(),
@@ -245,7 +260,7 @@ function handlePageChange(newPage: number) {
     query: searchText.value.trim(),
     tags: selectedTags.value,
     page: newPage,
-    source: selectedSearch.value,
+    source: selectedSearch.value as 'pas' | 'eur',
   })
 
   const payload = {
@@ -271,9 +286,6 @@ onMounted(() => {
     selectedTags.value = ctx.tags.length ? ctx.tags : [availableTags.value[0]]
     selectedSearch.value = ctx.source
     hasSearched.value = true
-    
-    // The items and pagination are already restored by restoreSearchContext
-    // No need to fetch again since we have the cached results
   }
 })
 

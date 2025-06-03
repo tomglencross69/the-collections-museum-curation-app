@@ -141,9 +141,7 @@ function showToastMessage(message: string) {
   showToast.value = true
   setTimeout(() => {
     showToast.value = false
-  }, 3000) // Hide after 3 seconds
+  }, 3000) 
 }
 
-console.log('PAS Query ON EUR SAVED:', store.pasSearchContext.query)
-console.log('EUR Query ON EUR SAVED:', store.eurSearchContext.query)
 </script>

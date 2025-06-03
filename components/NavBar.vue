@@ -1,5 +1,6 @@
 <template>
-  <nav class="hidden sm:flex gap-6 font-semibold px-1 py-2 text-xl">
+  <nav class="hidden sm:flex gap-6 font-semibold px-1 py-2 text-xl"
+  aria-label="Main navigation">
     <router-link
       v-for="(item, index) in navItems"
       :key="index"

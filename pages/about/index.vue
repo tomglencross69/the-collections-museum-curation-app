@@ -1,6 +1,7 @@
 <template>
   <section class="max-w-[640px] mx-auto bg-customYellow p-1 rounded-b-xl p-4 mb-4">
-    <h1 class="text-xl pb-5 font-semibold">About TheCollections</h1>
+    <h1 class="text-xl pb-5 font-semibold"
+    aria-label="about tab">About TheCollections</h1>
     <p>
       TheCollections is an exhibition curation platform developed by <a href="https://www.tomglencross.com/about" target="_blank" class="underline">Tom Glencross</a>. It queries collections from two APIs: the <a href="https://finds.org.uk/portable" target="_blank" rel="noopener noreferrer" class="underline">Portable Antiquities Scheme</a> and <a href="https://www.europeana.eu/en" target="_blank" rel="noopener noreferrer" class="underline">Europeana</a>. 
     </p>

@@ -15,7 +15,7 @@ import EURCard from './EURCard.vue'
 
 const props = defineProps<{
   items: any[]
-  selectedSearch: 'pas' | 'eur'
+  selectedSearch: 'pas' | 'eur' | string
 }>()
 
 </script>

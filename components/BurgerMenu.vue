@@ -39,7 +39,7 @@ function closeMenu() {
 }
 
 function onClickOutside(event) {
-  // If click outside menuWrapper (menu and button), close menu
+  // If click outside close menu
   if (
     menuWrapper.value &&
     !menuWrapper.value.contains(event.target)

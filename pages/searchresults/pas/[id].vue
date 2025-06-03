@@ -137,18 +137,14 @@ const item = computed(() => {
 
 // Computed ID
 const itemId = computed(() => item.value?.id)
-
-// Fixed: Use the correct method name from your store
 const isSaved = computed(() => item.value ? userStore.isInPAS(item.value.id) : false)
 
 function addToPAS() {
-  // Fixed: Use the correct method name from your store
   if (item.value) userStore.addToPAS(item.value)
    showToastMessage('Item added to your collection')
 }
 
 function removeFromPAS() {
-  // Fixed: Use the correct method name from your store
   if (item.value?.id) userStore.removeFromPAS(item.value.id)
   showToastMessage('Item removed from your collection')
 }
@@ -158,7 +154,7 @@ function showToastMessage(message: string) {
   showToast.value = true
   setTimeout(() => {
     showToast.value = false
-  }, 3000) // Hide after 3 seconds
+  }, 3000) 
 }
 
 // HTML Decode helper
@@ -189,6 +185,4 @@ const imageUrl = computed(() =>
     ? `https://finds.org.uk/${item.value.imagedir}${item.value.filename}`
     : ''
 )
-console.log('PAS Query ON PAS SAVED:', store.pasSearchContext.query)
-console.log('EUR Query ON PAS SAVED:', store.eurSearchContext.query)
 </script>

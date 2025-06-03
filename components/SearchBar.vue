@@ -3,15 +3,15 @@
     <input
     id="search-bar"
       type="text"
+      aria-label="Search"
       class="flex-grow px-1 py-2 text-lg focus:outline-none"
       :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      @keydown.enter="emit('search')"
+      @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+      @keydown.enter="$emit('search')"
       :placeholder="placeholder"
     />
 
-    <button @click="$emit('search')" class="p-2 ml-2 rounded hover:bg-gray-100 transition">
-      <!-- Custom Stonehenge SVG Icon -->
+    <button @click="$emit('search')" aria-label="Submit search" class="p-2 ml-2 rounded hover:bg-gray-100 transition">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" class="w-8 h-8 text-gray-800 fill-current">
         <path d="M5 55h6V25H5v30zm12 0h6V25h-6v30zm12 0h6V39h-6v16zm12 0h6V25h-6v30zm12 0h6V25h-6v30zM6 19h52v6H6v-6z"/>
       </svg>

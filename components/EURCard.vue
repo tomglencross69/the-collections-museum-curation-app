@@ -33,7 +33,6 @@ const store = useItemsStore()
 const props = defineProps<{
   item: any
 }>()
-console.log('EUR item:', props.item)
 
 const goToItem = () => {
   store.setSelectedItem(props.item)

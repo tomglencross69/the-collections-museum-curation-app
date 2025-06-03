@@ -1,5 +1,6 @@
 <template>
-  <section class="max-w-[640px] mx-auto bg-customYellow p-4 rounded-b-xl">
+  <section class="max-w-[640px] mx-auto bg-customYellow p-4 rounded-b-xl"
+  aria-label="account tab">
     <h1 class="text-xl pb-5 font-semibold">Account</h1>
     <h2>Welcome, {{currentUser}}</h2>
 <p class="py-5">
@@ -12,8 +13,6 @@ import { useUserStore } from '@/stores/users'
 const userStore = useUserStore()
 
 const currentUser = userStore.user.name
-
-console.log(currentUser)
 
 </script>
 

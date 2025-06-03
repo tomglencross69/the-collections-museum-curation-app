@@ -33,7 +33,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update-selected-search'])
 
-const setSearch = (search) => {
+const setSearch = (search: 'pas' | 'eur') => {
   const url = new URL(window.location.href)
   url.searchParams.set('search', search)
   window.location.href = url.toString() 

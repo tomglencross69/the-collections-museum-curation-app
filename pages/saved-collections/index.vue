@@ -26,7 +26,8 @@
 
   <!-- Gallery list -->
    <client-only>
-<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mt-6"
+aria-label="your saved items">
    <template v-if="items.length === 0">
    <div>You currently have no items saved to this collection.</div>
  </template>

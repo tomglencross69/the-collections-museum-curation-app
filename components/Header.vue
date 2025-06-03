@@ -1,18 +1,21 @@
 <template>
-  <header class="font-sans py-3">
+  <header class="font-sans py-3" role="banner">
+    
     <!-- Top row: burger + heading + usericon -->
    <div class="flex items-center relative z-10 gap-4">
+    <nav aria-label="Main navigation">
   <BurgerMenu />
-  <NuxtLink to="/" class="flex-1">
+  </nav>
+  <NuxtLink to="/" class="flex-1" aria-label="Go to homepage">
     <h1 class="header text-center sm:text-left gleaming-text">
       TheCollections
     </h1>
   </NuxtLink>
-  <a href="/account">
+  <a href="/account" aria-label="Your account">
+    <span class="sr-only">Account</span>
     <UserIcon />
   </a>
 </div>
-
 
     <!-- Subheading below -->
     <h2 class="subheader mt-2 mr-20">

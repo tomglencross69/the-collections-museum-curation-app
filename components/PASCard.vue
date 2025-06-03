@@ -33,6 +33,7 @@ const props = defineProps<{
     description: string
     imagedir?: string
     filename?: string
+    source: string
   }
 }>()
 
@@ -46,10 +47,9 @@ const imageUrl = computed(() =>
 function goToItem() {
   store.setSelectedItem(props.item)
   const id = props.item.id 
-  const source = props.item.source || 'pas' // fallback
+  const source = props.item.source || 'pas' 
   router.push(`/searchresults/pas/${id}`)
 }
-
 
 // THUMBNAILS BLOCKED BY CORB
 // const thumbImageUrl = computed(() => {
