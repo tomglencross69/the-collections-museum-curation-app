@@ -32,8 +32,10 @@
     </div>
     <div v-else class="text-gray-500">No item found.</div>
   </div>
-
-
+  </div>
+ 
+  <!-- RIGHT COLUMN: Tags + Currently Searching -->
+<div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
   <!-- Add/Remove Buttons -->
     <div v-if="item" class="py-1 flex flex-col gap-2 items-start">
       <button
@@ -51,10 +53,6 @@
   Remove from your collection
 </button>
       </div>
-  </div>
- 
-  <!-- RIGHT COLUMN: Tags + Currently Searching -->
-<div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
   
   <!-- QUERY SECTION -->
    <div v-if="store.eurSearchContext.query">

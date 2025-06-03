@@ -29,11 +29,26 @@
           <h2><b>Material:</b> {{ item.materialTerm }}</h2>
           <h2><b>Period:</b> {{ item.broadperiod[0] + item.broadperiod.slice(1).toLowerCase() }}</h2>
           <h2><b>County:</b> {{ item.county }}</h2>
-          <p v-if="item.description"><b>Description:</b> {{ decodedDescription }}</p>
+          <div v-if="item.description">
+  <b>Description:</b>
+  <p>
+    {{ showFullDescription ? decodedDescription : previewDescription }}
+  </p>
+  <button
+  v-if="isLongDescription"
+    class="mt-1 font-semibold hover:underline"
+    @click="showFullDescription = !showFullDescription"
+  >
+    {{ showFullDescription ? 'Read less ^' : 'Read more ⌄' }}
+  </button>
+</div>
         </div>
         <div v-else class="text-gray-500">No item found.</div>
       </div>
+    </div>
 
+    <!-- RIGHT COLUMN: Tags + Currently Searching -->
+    <div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
       <!-- Add/Remove Buttons -->
       <div v-if="item" class="py-1 flex flex-col gap-2 items-start">
       <button
@@ -51,10 +66,6 @@
   Remove from your collection
 </button>
       </div>
-    </div>
-
-    <!-- RIGHT COLUMN: Tags + Currently Searching -->
-    <div class="sm:w-1/2 sm:pl-4 flex flex-col gap-2">
       
       <!-- QUERY SECTION -->
       <div v-if="store.pasSearchContext.query">
@@ -110,6 +121,7 @@ import { useRoute } from 'vue-router'
 
 const toastMessage = ref('')
 const showToast = ref(false)
+const showFullDescription = ref(false)
 
 // Stores
 const store = useItemsStore()
@@ -160,6 +172,16 @@ function decodeHTMLEntities(str: string) {
 const decodedDescription = computed(() =>
   item.value?.description ? decodeHTMLEntities(item.value.description) : ''
 )
+
+const previewDescription = computed(() => {
+  if (!decodedDescription.value) return ''
+  const words = decodedDescription.value.split(/\s+/)
+  return words.slice(0, 100).join(' ') + (words.length > 100 ? '...' : '')
+})
+
+const isLongDescription = computed(() => {
+  return decodedDescription.value.split(/\s+/).length > 100
+})
 
 // Computed image URL
 const imageUrl = computed(() =>

@@ -1,5 +1,5 @@
 <template>
-    <div class="p-1 pl-2 text-white bg-black text-xs">
+    <div class="p-1 pl-2 mt-4 text-white bg-black text-xs">
     <div class="bg-black">
         <p class="text-white"><b>TheCollections.</b> <a href="https://www.tomglencross.com/" target="_blank" class="hover:underline">Tom Glencross.</a> 2025.</p>
       </div>

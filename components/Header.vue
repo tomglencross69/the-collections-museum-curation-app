@@ -4,7 +4,7 @@
    <div class="flex items-center relative z-10 gap-4">
   <BurgerMenu />
   <NuxtLink to="/" class="flex-1">
-    <h1 class="header text-center sm:text-left">
+    <h1 class="header text-center sm:text-left gleaming-text">
       TheCollections
     </h1>
   </NuxtLink>
@@ -55,6 +55,22 @@ line-height: 0.9;
 .subheader {
     font-size: clamp(1.2rem, 3vw, 3rem);
     line-height: 1.2;
+}
+
+.gleaming-text {
+  position: relative;
+  cursor: pointer;
+  background: linear-gradient(to right, currentColor 20%, theme('colors.customYellow') 40%, theme('colors.customYellow') 60%, currentColor 80%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-position: -250% center;
+  transition: background-position 3s ease;
+}
+
+.gleaming-text:hover {
+  background-position: 200% center;
 }
 </style>
 
