@@ -2,9 +2,9 @@
 
 # Live - here! [TheCollections](https://the-collections-museum-curation-app.vercel.app/)
 
-A virtual space to explore and curate exhibitions from two heritage collections within clean and accessible UX.
+TheCollections is a virtual space for exploring and curating exhibitions from two heritage collections, designed with a clean, accessible user experience in mind.
 
-Built with Nuxt 3, Pinia, and TailwindCSS, it integrates two open-access APIs, TheCollections offers full responsiveness, clear navigation, and persistent user-curated exhibitions.
+Built with Nuxt 3, Pinia, and TailwindCSS, it integrates two open-access APIs to deliver a fully responsive interface, intuitive navigation, and user-curated exhibitions.
 
 ## Features
 
@@ -12,7 +12,7 @@ Built with Nuxt 3, Pinia, and TailwindCSS, it integrates two open-access APIs, T
 - Filter and sort records
 - Individual artwork views with images and essential metadata
 - Save artworks to temporary exhibitions and view them in curated galleries
-- Designed responsively and with accessibility and semantic naming conventions
+- Built with responsiveness, accessibility, and semantic HTML.
 
 ## Tech Stack
 
@@ -22,7 +22,7 @@ Built with Nuxt 3, Pinia, and TailwindCSS, it integrates two open-access APIs, T
 - Queried and normalised data from Portable Antiquities Scheme API and Europeana API
 
 ## Figma and Wireframes 
-- You can view the Figma, planning, wireframes and component tree for the project here[Figma](https://www.figma.com/board/GneUPcx4qQbnQFL75d1iGA/museum-curator?node-id=0-1&p=f&t=n7RRd4SXXz3gYvAo-0)
+- You can view the Figma, planning, wireframes and component tree for the project here: [Figma](https://www.figma.com/board/GneUPcx4qQbnQFL75d1iGA/museum-curator?node-id=0-1&p=f&t=n7RRd4SXXz3gYvAo-0)
 
 ---
 
@@ -87,7 +87,7 @@ EUROPEANA_API=your_europeana_key_here
 
 ## Scope for further development...
 - [ ] Implement database storage for user accounts and authentication
-- [ ] Saved collections are currently managed in Pinia and persistant 'localStorage'; for production scalability and data integrity, saved collections should be migrated to a backend database with access handled through RESTful API endpoints
+- [ ] Saved collections are currently managed in Pinia and persistant 'localStorage'; for production scalability and data integrity, saved collections should be migrated to a database with access handled through RESTful API endpoints
 - [ ] Additional API searches collections, with more complex search filters
 
 
