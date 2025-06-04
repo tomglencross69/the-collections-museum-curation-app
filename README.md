@@ -16,16 +16,19 @@ Built with Nuxt 3, Pinia, and TailwindCSS, it integrates two open-access APIs, T
 
 ## Tech Stack
 
-- Built in Nuxt 3, within a Vue-based framework
+- Built in Nuxt 3, a framework based on Vue 3.
 - Uses Pinia as a lightweight state management tool
 - Styled with TailwindCSS for responsiveness and accessibility
 - Queried and normalised data from Portable Antiquities Scheme API and Europeana API
+
+## Figma and Wireframes 
+- You can view the Figma, planning, wireframes and component tree for the project here[Figma](https://www.figma.com/board/GneUPcx4qQbnQFL75d1iGA/museum-curator?node-id=0-1&p=f&t=n7RRd4SXXz3gYvAo-0)
 
 ---
 
 ## Setup, Development, and Environment Variables 
 
-To run a development server and explore the platform locally:
+To run a development server and explore TheCollections locally:
 
 1. Install dependencies:
 
@@ -84,7 +87,7 @@ EUROPEANA_API=your_europeana_key_here
 
 ## Scope for further development...
 - [ ] Implement database storage for user accounts and authentication
-- [ ] Saved collections are currently managed in Pinia and persistant 'localStorage,' for production scalability and data integrity, this should be migrated to a backend database with access handled through RESTful API endpoints
+- [ ] Saved collections are currently managed in Pinia and persistant 'localStorage'; for production scalability and data integrity, saved collections should be migrated to a backend database with access handled through RESTful API endpoints
 - [ ] Additional API searches collections, with more complex search filters
 
 
