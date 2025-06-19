@@ -11,7 +11,7 @@
       Search either artefacts from The Portable Antiquities Scheme or records from Europeana. <br>
       Use the search bar to look for exhibits by keyword. 
       <br> You can also filter with the tags below - the default is <i>All</i> results.
-      <br>For example, you might search <b>The Portable Antiquities Scheme</b> with a keyword of <b>gold</b> and the filter of <b>finger ring</b>.
+      <br>For example, you might search <b>The Portable Antiquities Scheme</b> with a keyword of <b>gold</b> and the filter artefact type of <b>finger ring</b>.
       <br> Hit enter - or click the standing stones icon -  to search.
     </p>
   </div>
