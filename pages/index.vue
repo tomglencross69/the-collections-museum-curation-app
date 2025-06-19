@@ -22,6 +22,7 @@
         :selected-tags="selectedTags"
         @update:selected-tags="selectedTags = $event"
       />
+      <SearchToolTip/>
     </section>
 
     <!-- LOADING AND ERROR STATE -->

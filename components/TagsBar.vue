@@ -1,5 +1,6 @@
 <template>
     <div class="flex justify-end gap-2 flex-wrap"> 
+        <div class="text-xs sm:text-base pt-1">Search filters: </div>
         <button
         v-for="tag in tags"
         :key="tag"
