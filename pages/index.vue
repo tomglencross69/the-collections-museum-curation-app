@@ -22,7 +22,7 @@
         :selected-tags="selectedTags"
         @update:selected-tags="selectedTags = $event"
       />
-      <SearchToolTip/>
+      <SearchToolTip v-if="showTooltip" @dismiss="showTooltip = false"/>
     </section>
 
     <!-- LOADING AND ERROR STATE -->
@@ -76,6 +76,8 @@ const selectedSearch = ref('pas')
 const searchText = ref('')
 const selectedTags = ref<string[]>([])
 const hasSearched = ref(false)
+const showTooltip = ref(true)
+
 
 const placeholderText = computed(() =>
   selectedSearch.value === 'eur'
@@ -127,6 +129,7 @@ function resetPage() {
 }
 
 async function handleSearch() {
+  showTooltip.value = false
   hasSearched.value = true
   itemsStore.setCurrentPage(1)
   itemsStore.setCurrentSearchSource(selectedSearch.value as 'pas' | 'eur')

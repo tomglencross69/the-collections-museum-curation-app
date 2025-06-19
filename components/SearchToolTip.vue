@@ -9,9 +9,9 @@
     </div>
     <p class="mt-1 text-sm">
       Search either artefacts from The Portable Antiquities Scheme or records from Europeana. <br>
-      Use the search bar to look for exhibitions by keyword. 
+      Use the search bar to look for exhibits by keyword. 
       <br> You can also filter with the tags below - the default is <i>All</i> results.
-      <br> Hit enter or click the standing stones to search.
+      <br> Hit enter - or click the standing stones icon to search.
     </p>
   </div>
 </template>
@@ -20,6 +20,7 @@
 import { ref, onMounted } from 'vue'
 
 const visible = ref(false)
+const emit = defineEmits(['dismiss'])
 
 onMounted(() => {
   const dismissed = sessionStorage.getItem('searchTooltipDismissed')
@@ -31,6 +32,7 @@ onMounted(() => {
 function closeTooltip() {
   visible.value = false
   sessionStorage.setItem('searchTooltipDismissed', 'true')
+  emit('dismiss')
 }
 </script>
 
